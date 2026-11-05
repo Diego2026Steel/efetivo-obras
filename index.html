@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Efetivo iBUILD">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<title>Efetivo de Obras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* iBUILD Guidelines 2026 · paleta de comunicação interna: Preto #000, Azure #2A646B, Grafite #333, Cinza Médio #B2B2B2, Off White #F1F1F1.
+   Layout: barra preta fixa com logo + menu (fundo principal da marca); coluna de trabalho de até 1080px; linhas que empilham no celular */
+:root{
+  --bg:#F1F1F1; --surface:#FFFFFF; --sunk:#E8E8E8; --ink:#1A1A1A; --muted:#5E5E5E; --line:#D9D9D9;
+  --accent:#2A646B; --accent-ink:#FFFFFF; --accent-soft:#DDEAEB;
+  --ok:#2E7550; --ok-soft:#DFEDE5; --bad:#B03A32; --bad-soft:#F6E0DD; --warn:#806419; --warn-soft:#F4ECD3;
+  --c1:#2A646B; --c2:#B79A4C; --c3:#333333; --c4:#7FAEB3; --c5:#8C8C8C; --c6:#DCC580; --c7:#16393D; --c8:#C9C9C9;
+  --bar:#000000; --bar-fg:#F1F1F1; --bar-accent:#7FB3B9; --azure:#2A646B; --gold:#DCC580;
+  --display:"Montserrat","Segoe UI",system-ui,sans-serif;
+  --body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --mono:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111111; --surface:#1C1C1C; --sunk:#262626; --ink:#F1F1F1; --muted:#B2B2B2; --line:#333333;
+  --accent:#6FA8AE; --accent-ink:#0B1B1D; --accent-soft:#1B3033;
+  --ok:#6DBF91; --ok-soft:#1A3025; --bad:#E87A70; --bad-soft:#3A201D; --warn:#DCC580; --warn-soft:#332C17;
+  --c1:#4E8F96; --c2:#DCC580; --c3:#8C8C8C; --c4:#9CCBD0; --c5:#F1F1F1; --c6:#A6873B; --c7:#2A646B; --c8:#5C5C5C;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111111; --surface:#1C1C1C; --sunk:#262626; --ink:#F1F1F1; --muted:#B2B2B2; --line:#333333;
+  --accent:#6FA8AE; --accent-ink:#0B1B1D; --accent-soft:#1B3033;
+  --ok:#6DBF91; --ok-soft:#1A3025; --bad:#E87A70; --bad-soft:#3A201D; --warn:#DCC580; --warn-soft:#332C17;
+  --c1:#4E8F96; --c2:#DCC580; --c3:#8C8C8C; --c4:#9CCBD0; --c5:#F1F1F1; --c6:#A6873B; --c7:#2A646B; --c8:#5C5C5C;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+/* base (substitui o esqueleto que o Claude fornecia) */
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;-webkit-text-size-adjust:100%}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+a{color:var(--accent);text-underline-offset:2px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--bar-fg);border-bottom:1px solid #262626}
+.brand{display:flex;align-items:center;gap:14px;padding-block:12px 6px;min-width:0}
+.brand .logo{flex:none;display:block;width:138px;height:16px;background:currentColor;
+  -webkit-mask:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAigAAABACAQAAACaPEQQAAAVjklEQVR42u2de7BV1X3HP2utfS9PISAqYNAoMYA8fRAwGETFZwRFhaROHKdJmnbUmMZMmrFOOzUv206SmTaZJiZtk2aqNkYJRhENGpS3CD4QyYWohfqAgIiJmMvl7rVW/zj7nrvf3HvP3vucc92/M87o8Z79WI/v+j2/PwEIgmLJSgR5iKUIEQXetbgZsE06Qo2xEhv5DXv7/rYPv1G4R/+RYDmnYL2fWwSL2YZCN/DgKO/fDLaJJ7mUZhOJ9G1I2xSrT6G5kS+gq7umsstf4QpE4vM7PMSHqqgAoFE8zFeOhgwOMIkPBb4bnNnLtOaio3QEcFIiMZjM7zIg9N9ujhAbHid99JOg7lfO99rZiuPbTLWtPBMDMRbTwMBikXyGiZHvXwdk7JqWGE7l0pj/c0dPhhr+hMF42GsRGW1OieF/mBVAxiyGR/AyexBs4A9s5jXewQASMgMVgcXhKcZVR8XF4R/4MU5OW+YJTg3c606+n8G9JIZ7mV2dAReHn3FbJm8hsCxjeuDaP+TruY1QLWDi8jVuwMWpeeW1sR+BZRMH2cVudlWPMuXpy42nUxkmMRUdAH+Nw08SDUGJ4QIsnb4RswgOsPzou8ypKnLdgJKdjGFsDoNUueYSAPbwPOu4h/8FVKZTOi707MNznPbwvT6Q2wyMynQegtce2bCn9KiM1mHXVT7pbcud7GcNT/EM71TNi0YDFMs5tOIGDJ4WDvI4JDytQfJJBMpn4GkkL/AusieAkp8cwWSsoXRZr11PP4YxXMbtPMR32OSdnGSm3nZpDbon7qiGvFeHbwY0is6cZjfra2crnRmtQ7/PRKGYxCTmcjt7+DUPsgztne+NIwbLVSFdxKDYzL4E+BMYRnBGVcXoduEuQxz97ST5uk9lDh+F433AonEZxBI2chcjsZm9kf/ZBTKniFXe92rJ8S2KHKHan1RkuvIcBBaDxsUwhhtYygYWIzA5H9K9e2/DaM6PAYfHUwwewYUMDxhJFolhfU+c0NLnr24Wv3U44uNg0Vg+z0qOxTTwwi5a3YWNTR3sbPS1V4EYiUWjmcV9bOCjAfOCOkd44EKGhjwoik6WpnhDLOeHVo1BspWtCU7cyKJrRaAQCA/JRRNOrULSyZmsZFBTvkFesr8cgoLWn8KgmcU6bkbnrPn3Jm9mXkhJ0Aie4eWE4IvAMJBLYnSax3r2Vg6WhQwMfNeWYcQkn2HSnmomQup9J2fwTW5t6CyaYqWl4OXb36UrqhNn4knPl/Q9TuXWBoh3CQxDuNyXt9U1S0sRCZ46iWYm46seve43+03PZtgBtjfZ4hBVK1WHptVBcyPf59UGc43V94zqj+DVCKltFUe6DBkZliN8iTf5dt0hRaI5j7Ehd7TEsjbRtSEQnOsZOX4Pyi7W9CyhxAFaQljbmcsy1Cju5Ws1ag8Cy3FMYSqzmcigUKBbYBnAIr5TAkod5M2meEqNYjPX9yEeKLCMZxytzGU0H+E4X1zO/1ctdPItnmZNnTVlAcyP8Yb8jucRiSHjaFRI47Ce9p4BpAMFhfss8BZtGVypjTUAnMoX+CsGRiBlAd8p4aQOi3dz05g97/V5HVZ+96/AMKYxnyuZgaqmVvo9ej9iOm6GaQx9gU6HiyIhY8kv6UgAB4nhBCaFPCgCWE6P8whhIcMDm/IRDuQ0EC3IDBRBgcCieZUv8St+xWDfoEkEMziefXWdytJf0/iGS9902IrfzmL4I2tZyx2cyV/z6ZCRIHGZyKf5zzrqKArNdKaEEikk8Egi8EsMn+CYUN2PwmVNT/2qDoIfMibw3Tkc6EmAqE9aismw7kbisIprWYEN4PBwji0BpZ/7a6jZuVpr4KHilnXZwvU8xHc5MQQpltu4l4466oyCazw9xa+f/J4XEt/dAgtD/hWD4mle7ykAS+BtXI7g4uLSidvAGY/hRXEEh8dY4XtZgYvl7NxT9kop4bNSDClxuI/ZtAW2nMTwYT5VtzS3io9kQcTggZW8gxML/gLDcGYiIiHj+3ueMCohkP9XyQFsLuv9vyLfDCjXeymFHWsuLbzOfA6ETn7LddQrAUNgOZnxISAQwH2pdT8zGRsJGZueGzzNf45bLHsjacSlsVMKhdYKtfAGX0b6Vl7Fmze8TpnbEljIoFACvaKdTYlFgQI4PwQdBslOXuw5B0F/MAyONCwPRynvF3FR3M1LPiesQDOKeXXaYwbFNTEGz2p+H4A9AlGhFhaFntdg2cCRnhcTyH7gCNzNodIFW0qd16HA5Z8j2vPU3IhQj5YjO4qZMQn09yfueYnltJiQsWBpb3R+2Q/yH07nAxnzuJRSSl/iRo9wEOXbfIKz62KAKwRzGRgxeN5lRaI3RAIXQkDbtyj2s6o3nqD+YfIEhwC2NHg1Uin9EVAUb7HRt/IkMI1BdfCiWCxLQlq7QbCFNxLDvwbFJ2OMpM28l2gk9VMN5awAfAja2Veu71LqshbX+DQSAQwLaCzFhYxHcqFHX+A3eH6TuOMFhpFMC0WFLPBgKIzcrwGlgpx/4cNVi2Ubb2bGjFtKKb3x573gM74Fhg8wpfBdJoEzGBFyAyhMCguKQnARxwS0KYtCsw7bm70kmxhMKsRK3+B0X6qwQfBoCJtLKaUoQGlDBHQSlWEPid5oSld5JB9Bg+elxIPWYpkXKSQUPMv21BxZhQoadE7hHFeyRhCrVPJUkvgH8Hfc7oMTi+A9fpRYS1lKKXl7Ug6H2IXa62DwDGRByFAxSNYktuoSaAYl0CoZnERA6dpnqluLcQp2n5qAC7UWOYWLuSWgnYBLC//E6yXBUil1ARPBLnYw3dc2D6axoVCnrETzMU6KsKDAwylFgZrZnNRrWiXLBbg8x7vdjP9OoYrYGGbUVG1cSSg+jVOYzEcZ5Pmmu17OpYXHudMrJy+llEYwgsbXweC5JBLhkexiY6LmLoCPYwOAYpC8zLpEI0mh+QhPAHu4l+92xY+cQglzF7OYLLMTZbWbkEHRwuMsRJep96XQmEkNFMKCIrkgku8qWE57ouauEVwZolQ1SNZzJFEBEMDVWFzGcCvXcSv3otCyDhHy2j4GFxeNxakyZgkU7/I1rqC9zJkthf7Xpr03cc/JnBWK8AgEq1MaZ1jGMiGmkPDhoyTyXYxAYnEZzT18HI1ymm54o1FxxWGe4Mvs8EJ1pZTC+7Z1iuEqRKDxqkXxNitTcmQNVzAkQqvUwdrE3wgMYznTK4J0cFHcxfTiNZTsNZ4O/pETuYIdtJbaSSml14bzIpyw8AQHE32LFVqlqP6xgb2JIWOJYJavHZiDZhJLMM2feq+4lDu4HDhSduQp5X2un2hOZJZXgBJkQUnaGwLNCM6KLSRMo1WyXBbyVlquLDqxrYsCsraPDbXUmMHNLGcVl2MybEVaSinN2CvycoaGaJ4UHaxPzHdVwCxOCHUXlOhUg0czhCsCCaQSwRSErEtiW20f4dHvaR9nlmEey/k5x4Vi6aWUwvsqE+baGONlY4rxApUq43CY+bdsT/RISmAKYyI1/qrIsLFF8EfeyuBKoxlcRUaN8oLHGssSPsJFuXH2l1IKDR1PMhzHnJiCmvtT8l1dWrkqJsy8ns7UkPECbIAAG+BPRQKKxuEebqqxjYbAMo6RTOZ05jAXVUVJBXQygxXMQYcMo1JKKY5rnjo2zpjN4EiO7GGWp0Z4JvLhEKDIo9AqaRyuiknufxrrFO5D0TUHdnezm+cAOIub+HNMdRpb6ORsbuOOMvm+FOoTZXHryq+8JCZH9hVeSzFeDBdBKMws2cvqRO5ZiWFcDAG25ZHiq42F1+S8lo9E4uAg2cJnuAnp00ccDF9mTJ2ogUt5f2snlhM4OdB2DtYWlLkt0Azj4lClvQGW4SZW3xsUiyMGD2yiPREbJIIFDAzATYUAe33xgGIzyZWtZMtW0u3/jb/xRdgFhmNYEgqclbmUpRQzj0M4NvTtuxQX4ZnO8aGjVAG/TE1PO44pIeeqBZal0CoZLAtjuN3WcwDV3BERjYviu7wcgBTLtRk0S7cU1RcvGtArIaZZAWVsqO9ecQ1auxylJuRcfZHnUgr8BJcwJMI928mGxDBzhdvtjJhV+nNs0WHjfGJHmp8HmDwFEzNg8lSFdO4VwDEMDU1PZ7k7mxRQJiGq29MieZttBfEbawbEOEphla8iP4lWKRx6foYdiUeyAi5mJDrkxnVZB/0hUxYEu0IIOoKpNbHRCSyHQkvl3Fy0FAGcxIk+pVMB68qK6SZdiVMItwA7VFhR4DTGh7KwBPBY4loSaIZycSytUnqC6GUhPUwj2MpOJFb2g2Qey7MhjULVpE9UuDQ3hU6WobkYIgI4PjLlR8q92aSNNOb5tqcBttLRG874mjwoc0NahUHxJqtT09M+Fmk9qkijVRJoBjAn0v/Y8iC6fwAKwKEcmpEOCA39DEaE0pOzApQzIz1xS6EJa8os5zDZtz0t8EZB8UYDXBvT9e8RDiXy7gtgbozXpY2NKSBkmRPRhCSii++/fwBKHjknz0YKqCb3rqFAj12/83xwaBDs47dlX6GmDBp/NlDRK4BVhbjYJYbTIp0Cu1hQksPMkoURWiVYh5sKQnH9j3d1gZDsF66wCTlswFcj97kmc91BYhnNPJ/FaoG9tJdxnqbTT1zGsyTgAFVYni7kaJDAVSEC6kqnwMdSQsaWcXy417RKiktjQsYraa+AkOwXyc6nRobN1qxAvkAnTvU6EsvnGZdx4xGJ4UaG+kwpC2zF1KE9VCm19oe6i6E+53rFg/JyIZRfFrggZg2vYl8iC4oEFjIoEjJuZ0Nqov7pnBFDj7Cqa8/JfpHufM5Rg769BRTJLnb4BrbSaOCrkXKoWk+1k7klFNazPFXu0KYSB4Phbi4MVNEYYGmoriY/FpTjmRXTKfChlNoiAyyI0TXWsi8lZCw4J1TWYlG81a0JNTugtODyQRaGMPNIzfmJEs1TgeCYg+YvuZ4jVS7bWp9cM4CfMtx3qlkcbApZXymN12wOXEZwN9cFEtwrLCQ/gQJqyiRwaShkYFG4KV3/BIZRHoUjocrk5JCxxrIoBoSe4e0unVo2raGjcFB0MoifBVRNi+Qdtte4KS3wi5ATVqL4GZ/1kv5VH/0cwluGnYziQeaFTjXLkykNrUtpBBCR3toTGFxauIFNXBcor6s41x/mtUJMVwssiun6t4W21PS02RyLG6JV8tLTEkFoNHNjUOPX3SDjFI7oTs0RHQvVRovz+AZzAkEsi+D/0DVuSo1kPVs407fhBRbDv3Mx3+KFKqz5U+dtSq2O8HoeaiwGh0/xDU6OqMSC/0Cn9GqjoR2TTp9hllDrzLyPI6fX68N4f+//1WQu43qmeQX9wS3uckchKQACw5BIhMcCD2BTe1TNjzH0X6QtJWSsmcngSN7KYZZ1j0uxgPIn3IzKu8fwIT7GAs7zSJaCULAGt+ZNKejk6ywLEU4KDEu4hv/mPp5jT+htVEpQ21b/ZgKLuYapkSc3SH7HA8gmpV44mNnsknuvnL4/5wcZykmMZxYTOBun2saFAGlRC3/Pi4WQaChc5nBiaC0pOngwRddwGcDCSN6KZD06hbFIsDimHdgOdnWDkFMo3+V8vlczm9o0RmE4iWHVHD0V2dT3ZXA2aCS/YiOzI4Q1GsUN3MAfeJHnWce7PM9hBAcSls8wWrGczIlMYAqzmVC9vgqdEA630NGUnQ8lcBuv1TC7I5gRoRSsQO5P+XaGW1MCE/ler3NMJjAWi+BkhoaazalIun0Lj/H1Ajl5lsRQOO7m1cTZEFgmc0rIWyKpVCYn58gOZn4IPA2SFYjukHWxgDKVqRlajpWTQYTOBodH2ZjZKf85NsUoeRaDYDjnci43e5qXYDd7Y6dwGoOwHgCmL8Mf8WjGy7CofBYBXJnTtcdl+h6VmuCbqS0KaHzesPCqbGEDnyrIDyZwkZwfo2ssx03UNSSGS0KGmkXyBmtTaJU0UyKczRLN/f7ghVNwtYPJiGRPIGKe3aDo4IsZLT+D4iU+wfIIrV6376Rypg4GYEqkNCzO+yNjlmEFTh7mi5lrJ52F5ivbmo8cIoynTg6VTX3x1wifL0wmBDM0EoffsIg/FlLBU9nQ0zkppGso4IEULd3gxCTqKzbSkXigCWAJDm7I4HmTNn/PZKdwD3l+UvGbXMfOzE4HjcOTHqS4EW1I+Bq1d5lfyRtFJGYkaCwtPMzVdGZOr30cFNq9Oo8VI3JxymYPURKF4U5u93SAojTDq3FCFI6C3WxK1DUqXf8mJdAqiZTylvkxZNaP8p4fhGQ/qfPUgMM7LGFppjESF4cnuYztOAjcRPuycm6p2I9InSaNwuFOrsbN+FQzwOySrom8WZJdtBc3epTzud1z3Re18ltYFNrHGlhHZyLAKwSXxuTIdrAxMW9FYjktAkICwS+CK0w28UQatBdXkCg0dzOTB2pk1Y+DFMVqZnE77The7kHtnPqVzkKgUDzOfP6WzlzS2dxyz+e48rTnR1G8zV1cyGWsRiVqqvkUBU5mYgwLyn1HoWE9L4ZWaSOvpCbqX0lrAIQ0kl085Td4KiaP8fk2bKbnWWXwRS5D6b/qK9zDL3jRC6Jl7xuQHOJbPMBn+DPGeZPX9Wayh85PW2XU7UqOAvg1P2AZoHJr/NE9Aybje+Q3u8Gnt5l1rMymcizYN7iN9axmJb/31oIuuIboXFTAr2FR7OXJRC1JoDmGi2IS9R9L2f2WSpVxkFRJcBPtQa+LAwwO+Tay01oG5uY1cdmH5Vn2sJHn+C0dXvRF59aRTbKDr/JN5nIls5hAa0jNtKlBR+W5krtkP8+yjod4nkq0IK9l6J+BVu+fxp/dbsnmmVuRmb35XgyGzbzHGvawrVqVrgoGk67M6kWYgKGiUWzmD4nOVYnmXE4IGdgCm0KrJNGMZBYGgcFiESgMX+GR8NoVwBkMCvx8K4cycg5OYVjGOk+XFnWAXQgOh0K5+buUXW/UTmM8M5nNME5nUI8Y4g4j2M0+tvMSW9jOwWoifp7L0D8DFsHelOwEep0RNDSH2Y3O9ZvsquGZBZZTGZ3Rk2q24QIdBA9lXYfq8AoLys6Y/3MjP0g0/R1c/oVbIt/v4HRPi47/zef4ceC7Nm5hZfQuDnhNs/LgeN9G3nEF4eF0EWeD8TQV0OxkJysAOJZWWjmrGlS0TOcEDJJnOIjw8Hw/OxHs9w2/RHrWeJ6yLbe5ha2Fei5q+eWrEXabbFZexYR168gENJ0dka47h3kwJcKjaWE8bQGA1SiWYhJByAJDaPOSJ15gDytYQ3ucg0HEhPuys7RlbueXTUTTojhYhNdgzPQhcG4La5UqI9SYJrdrF9dmpJ5PahqKplPGeLFsDwprdR9AW4T+LvYq/w+YUNWniiEv8QAAAABJRU5ErkJggg==") center/contain no-repeat;mask:url("data:image/png;base64,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") center/contain no-repeat}
+.brand .sep{flex:none;width:1px;height:22px;background:currentColor;opacity:.5}
+.brand h1{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin:0;line-height:1;white-space:nowrap}
+.brand small{font-family:var(--mono);font-size:12px;opacity:.75;white-space:nowrap}
+nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;color:var(--bar-fg);opacity:.62;text-decoration:none;font-weight:500;font-size:14px;padding:10px 12px 11px;border-bottom:3px solid transparent}
+nav a:hover{opacity:1}
+nav a[aria-current="page"]{opacity:1;border-bottom-color:var(--bar-accent)}
+nav a:focus-visible,.navbtn:focus-visible{outline:2px solid var(--bar-accent);outline-offset:-2px}
+.navbtn{flex:none;font:inherit;font-weight:500;font-size:14px;color:var(--bar-fg);opacity:.62;background:transparent;border:0;border-bottom:3px solid transparent;padding:10px 12px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.navbtn:hover,.navbtn[aria-expanded="true"]{opacity:1}
+.navbtn[aria-current="page"]{opacity:1;border-bottom-color:var(--bar-accent)}
+.navbtn span{font-size:11px;transition:transform .15s}
+.navbtn[aria-expanded="true"] span{transform:rotate(180deg)}
+#cadmenu{position:absolute;min-width:210px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;box-shadow:0 10px 28px rgb(0 0 0 / .22);padding:6px;display:flex;flex-direction:column;gap:2px;z-index:6}
+#cadmenu[hidden]{display:none}
+#cadmenu a{color:var(--ink);text-decoration:none;padding:10px 12px;border-radius:4px;font-weight:500}
+#cadmenu a:hover{background:var(--sunk)}
+#cadmenu a[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+#cadmenu a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+@media (max-width:560px){.brand .logo{width:112px;height:13px}.brand h1{font-size:12px;letter-spacing:.1em}.brand small{display:none}.userbtn .un{display:none}.userbtn{padding:3px}}
+.userbtn{flex:none;display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid transparent;border-radius:999px;padding:3px 12px 3px 3px;color:var(--bar-fg);font:inherit;font-weight:500;font-size:14px;cursor:pointer}
+.userbtn:hover,.userbtn[aria-expanded="true"]{background:rgb(128 128 128 / .22)}
+.userbtn:focus-visible{outline:2px solid var(--bar-accent);outline-offset:2px}
+.av{flex:none;width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;background:var(--azure);color:#FFFFFF;font-size:12px;font-weight:600;letter-spacing:.04em}
+.av.big{width:46px;height:46px;font-size:17px}
+#usermenu{position:absolute;width:min(300px,calc(100vw - 16px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;box-shadow:0 10px 28px rgb(0 0 0 / .22);padding:16px;display:flex;flex-direction:column;gap:14px;z-index:6}
+#usermenu[hidden]{display:none}
+.uhead{display:flex;gap:12px;align-items:center;min-width:0}
+.uhead strong{display:block;font-size:16px;overflow-wrap:anywhere}
+.udl{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin:0;font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+.udl dt{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.udl dd{margin:0;min-width:0;overflow-wrap:anywhere}
+
+main{padding-block:18px 40px;display:flex;flex-direction:column;gap:16px}
+h2{font-family:var(--display);font-weight:600;font-size:22px;text-transform:uppercase;letter-spacing:.08em;margin:0;line-height:1.2;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:14px;text-transform:uppercase;letter-spacing:.1em;margin:0}
+.lead{color:var(--muted);margin:2px 0 0;max-width:65ch}
+.head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.pad{padding:16px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field>span{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.grow{flex:1 1 200px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:9px 10px;min-height:42px;width:100%;min-width:0}
+textarea{min-height:140px;font-family:var(--mono);font-size:13px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:0;border-color:var(--accent)}
+.btn{font:inherit;font-weight:600;font-size:14px;border-radius:4px;padding:9px 14px;min-height:42px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn:hover{background:var(--sunk)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.sq{width:42px;padding:0}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.tile b{display:block;font-family:var(--display);font-size:32px;line-height:1;font-weight:600;font-variant-numeric:tabular-nums}
+.tile span{font-size:12px;color:var(--muted)}
+.tile.alert b{color:var(--warn)}
+
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.acc{background:var(--accent-soft);color:var(--accent)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+
+/* presença */
+.counts{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline}
+.counts .big{font-family:var(--display);font-weight:600;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.grp{border-top:1px solid var(--line)}
+.grp-h{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--sunk);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.prow{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:0}
+.who{flex:1;min-width:0}
+.who strong{display:block;font-weight:600;overflow-wrap:anywhere}
+.who em{font-style:normal;font-size:13px;color:var(--muted)}
+.seg{display:flex;flex:none;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{font:inherit;font-weight:600;font-size:14px;padding:0 14px;height:40px;border:0;background:var(--surface);color:var(--muted);cursor:pointer;border-left:1px solid var(--line)}
+.seg button:first-child{border-left:0}
+.seg button[data-s="P"][aria-pressed="true"]{background:var(--ok);color:var(--surface)}
+.seg button[data-s="A"][aria-pressed="true"]{background:var(--bad);color:var(--surface)}
+.rm{flex:none;width:36px;height:36px;border-radius:4px;border:1px solid transparent;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;line-height:1}
+.rm:hover{border-color:var(--bad);color:var(--bad)}
+.who-tag{display:inline-flex;gap:6px;align-items:center;font-size:12px;opacity:.85;white-space:nowrap}
+.pick{display:flex;flex-wrap:wrap;gap:8px 16px}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.savebar{position:sticky;bottom:0;z-index:3;background:var(--bar);color:var(--bar-fg);border-radius:6px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.savebar .btn{border-color:var(--accent)}
+
+/* listas */
+.list .item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line)}
+.list .item:first-child{border-top:0}
+.item .who{cursor:pointer}
+.item input[type=checkbox]{width:20px;height:20px;min-height:0;flex:none;accent-color:var(--accent)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.form .full{grid-column:1/-1}
+.check{display:flex;align-items:center;gap:8px;font-weight:500}
+.check input{width:20px;height:20px;min-height:0;accent-color:var(--accent)}
+.confirm{background:var(--bad-soft);color:var(--bad);border-radius:4px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+
+/* painel */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .top{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.card .fig{font-family:var(--display);font-weight:600;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.card .fig small{font-size:20px;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:5px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 3ch;gap:8px;align-items:center;font-size:13px}
+.bar .lbl{display:flex;justify-content:space-between;gap:8px;position:relative;padding:3px 6px;border-radius:3px;overflow:hidden;min-width:0}
+.bar .lbl i{position:absolute;inset:0 auto 0 0;background:var(--accent-soft);z-index:0}
+.bar .lbl span{position:relative;z-index:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar b{font-family:var(--mono);font-weight:500;text-align:right;font-variant-numeric:tabular-nums}
+.subhead{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* relatórios */
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:560px;height:auto}
+.chart text{fill:var(--muted);font-family:var(--mono);font-size:10px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-top:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;border-top:0}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+tfoot td{font-weight:600;border-top:2px solid var(--ink)}
+.matrix th:first-child,.matrix td:first-child{position:sticky;left:0;background:var(--surface);z-index:1}
+.matrix tbody tr:hover td{background:var(--sunk)}
+.matrix td.miss{color:var(--warn);font-weight:600}
+.matrix td.tot,.matrix th.tot{background:var(--accent-soft);font-weight:600}
+.matrix tr.today td:first-child{color:var(--accent);font-weight:600}
+
+.empty{padding:28px 20px;text-align:left;display:flex;flex-direction:column;gap:12px}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.banner{border-radius:4px;padding:10px 14px;font-size:14px;background:var(--warn-soft);color:var(--warn)}
+.banner.bad{background:var(--bad-soft);color:var(--bad)}
+.lockwrap{min-height:60vh;display:grid;place-items:center;padding-block:24px}
+.lock{width:min(400px,100%);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.lock h2{font-size:18px}
+.lock .who-line{display:flex;gap:12px;align-items:center;padding:10px 12px;background:var(--sunk);border-radius:4px;min-width:0}
+.lock .who-line div{min-width:0;overflow-wrap:anywhere}
+.lock .err{color:var(--bad);font-size:14px;font-weight:500}
+.lock form{display:flex;flex-direction:column;gap:12px}
+.linkbtn{font:inherit;font-size:13px;background:none;border:0;padding:0;color:var(--accent);text-decoration:underline;text-underline-offset:2px;cursor:pointer;align-self:flex-start}
+.umenu-actions{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.umenu-actions .btn{min-height:36px;padding:6px 12px;font-size:13px}
+.team{border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.team .grp-h{gap:10px;flex-wrap:wrap}
+.team .item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid var(--line)}
+.team .grp-h + .item{border-top:0}
+.team .item.off strong{color:var(--muted)}
+.switch{flex:none;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.switch input[type=checkbox]{flex:none;appearance:none;-webkit-appearance:none;width:40px;height:24px;min-height:0;border-radius:999px;background:var(--line);position:relative;cursor:pointer;margin:0;padding:0;border:0;transition:background .15s}
+.switch input[type=checkbox]::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--surface);transition:transform .15s}
+.switch input[type=checkbox]:checked{background:var(--ok)}
+.switch input[type=checkbox]:checked::after{transform:translateX(16px)}
+.switch input[type=checkbox]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.switch input[type=checkbox]:disabled{opacity:.5;cursor:not-allowed}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--bar);color:var(--bar-fg);padding:10px 16px;border-radius:4px;font-weight:500;z-index:20;max-width:calc(100% - 32px)}
+#toast.bad{background:var(--bad);color:var(--surface)}
+@media (max-width:560px){
+  .prow{flex-wrap:wrap}
+  .seg{width:100%}
+  .seg button{flex:1}
+  h2{font-size:18px}
+}
+@media (prefers-reduced-motion:no-preference){.btn,.seg button,nav a{transition:background-color .12s,opacity .12s}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="logo" role="img" aria-label="iBUILD"></span><span class="sep" aria-hidden="true"></span><h1>Efetivo de Obras</h1><small id="hoje"></small><span id="userbox"></span></div>
+    <nav id="nav" aria-label="Seções"></nav>
+  </div>
+  <div id="cadmenu" hidden></div>
+  <div id="usermenu" hidden role="dialog" aria-label="Seu perfil"></div>
+</header>
+<main class="wrap" id="main">
+  <div class="panel empty"><h3>Carregando dados das obras…</h3><p class="muted">Obras, empresas, colaboradores e presenças aparecem aqui assim que a conexão responder.</p></div>
+</main>
+<div id="toast" hidden role="status" aria-live="polite"></div>
+
+<script>
+const DEFAULT_FUNCOES=["Encarregado","PCP","Engenheiro","Montador Steel Frame","Montador Drywall","Eletricista","Encanador","Pedreiro","Ajudante","Meio-Oficial Montagem LSF","Carpinteiro","Armador"];
+const VINC={CLT:"Próprio",TER:"Terceirizado",DIA:"Diarista/autônomo"};
+const NAV={presenca:"Presença",painel:"Painel",consolidado:"Consolidado",colaboradores:"Colaboradores",empresas:"Empresas",obras:"Obras",relatorios:"Relatórios",acessos:"Acessos",config:"Configurações"};
+const VIEWS=Object.keys(NAV);
+const CAD=["colaboradores","empresas","obras"];
+const ORDER=["presenca","painel","consolidado","CAD","relatorios","acessos","config"];
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=()=>iso(new Date());
+const parseD=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const addDays=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return iso(d)};
+const fmtD=s=>parseD(s).toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"2-digit"});
+const fmtShort=s=>parseD(s).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});
+const cmp=(a,b)=>String(a).localeCompare(String(b),"pt-BR");
+const byNome=(a,b)=>cmp(a.nome,b.nome);
+const WINDOW_START=addDays(today(),-120);
+
+const S={db:null,sb:null,session:null,uid:null,dl:null,canWrite:true,cfgErr:"",setup:false,authBusy:false,unsubs:[],
+  obras:[],empresas:[],colabs:[],pres:new Map(),extra:new Map(),
+  got:{obras:false,empresas:false,colabs:false,pres:false},slow:false,error:"",noDb:false,
+  view:"presenca",sel:{obra:"",data:today()},drafts:{},saving:false,painelData:today(),
+  rep:{obra:"all",dias:30,por:"funcao",ini:"",fim:""},cons:{dias:15,col:"obra",fn:"",ini:"",fim:""},hist:new Map(),histFrom:null,histBusy:false,teamF:"",
+  loginErr:"",pwMode:"",cf:{q:"",obra:"",emp:""},selC:new Set(),
+  editColab:null,editObra:null,editEmp:null,confirm:"",showImport:false,importText:"",importObra:"",names:{},
+  perfis:[],funcoesCfg:null,cfgNova:"",cfgConfirm:"",userDone:false,perfisSeen:false,editUser:null,me:null};
+let CFG={};
+
+/* ---------- perfis ---------- */
+function role(){
+  if(S.sim)return "ENC";
+  if(!S.userDone||!S.perfisSeen)return "LOAD";
+  if(!S.uid)return "ANON";
+  const p=S.perfis.find(p=>p.id===S.uid);return p?p.papel:"PEND";
+}
+const ADMIN=new Set(["RH","ENG"]);
+const isRH=()=>ADMIN.has(role());
+const allowedViews=()=>isRH()?VIEWS:role()==="ENC"?["presenca","relatorios"]:[];
+function myObraIds(){if(S.sim)return S.sim.obras;const p=S.perfis.find(p=>p.id===S.uid);return p?.obras||[]}
+const realAdmin=()=>!S.sim&&isRH();
+function repObras(){if(isRH())return S.obras;const ids=myObraIds();return S.obras.filter(o=>ids.includes(o.id))}
+function minhasObras(){
+  const ativas=S.obras.filter(o=>o.ativa!==false);
+  if(isRH())return ativas;
+  const ids=myObraIds();return ativas.filter(o=>ids.includes(o.id));
+}
+
+/* ---------- helpers ---------- */
+const obraById=id=>S.obras.find(o=>o.id===id);
+const empById=id=>S.empresas.find(e=>e.id===id);
+const empNome=c=>empById(c?.empresaId)?.nome||"Sem empresa";
+const funcoes=()=>S.funcoesCfg||DEFAULT_FUNCOES;
+const pkey=(o,d)=>`${o}_${d}`;
+function getPres(key){
+  if(S.pres.has(key))return S.pres.get(key);
+  if(S.extra.has(key))return S.extra.get(key);
+  const data=key.slice(-10);
+  if(data<WINDOW_START&&S.db){S.extra.set(key,undefined);S.db.doc("presencas/"+key).get().then(s=>{S.extra.set(key,s.exists?s.data():null);render()}).catch(()=>{})}
+  return null;
+}
+function nameOf(id){
+  if(!id)return "";
+  const p=S.perfis.find(p=>p.id===id);return p?(p.nome||p.usuario||""):"";
+}
+function errMsg(e){
+  const c=e&&e.code;
+  if(c==="invalid_argument")return "Seu perfil não permite esta alteração. Encarregados só podem lançar a presença de hoje nas suas obras.";
+  if(c==="revoked")return "Sua sessão expirou. Saia e entre de novo.";
+  if(c==="quota_exceeded")return "O banco de dados chegou ao limite. Exclua registros antigos para continuar.";
+  if(c==="resource_exhausted")return "Muitas alterações seguidas. Aguarde alguns segundos e tente de novo.";
+  return "Não foi possível salvar. Verifique a conexão e tente de novo.";
+}
+let tt;function toast(msg,bad){const t=document.getElementById("toast");t.textContent=msg;t.className=bad?"bad":"";t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3500)}
+const W=()=>S.canWrite?"":" disabled";
+const dis=c=>c?" disabled":"";
+
+/* ---------- período ---------- */
+function periodDays(o){
+  let a,b;
+  if(o.dias==="custom"){a=o.ini||addDays(today(),-29);b=o.fim||today();if(a>b)[a,b]=[b,a];if(b>today())b=today();if(a>b)a=b}
+  else{b=today();a=addDays(b,-(o.dias-1))}
+  const days=[];for(let d=a;d<=b&&days.length<732;d=addDays(d,1))days.push(d);
+  return days;
+}
+function periodFields(grp,o){
+  const c=o.dias==="custom";
+  return `<label class="field"><span>Período</span><select id="${grp}-dias" data-bind="${grp}.dias">${[7,15,30,60,90].map(n=>`<option value="${n}"${n===o.dias?" selected":""}>Últimos ${n} dias</option>`).join("")}<option value="custom"${c?" selected":""}>Personalizado…</option></select></label>
+  ${c?`<label class="field"><span>Início</span><input type="date" id="${grp}-ini" data-bind="${grp}.ini" value="${o.ini||addDays(today(),-29)}" max="${today()}"></label><label class="field"><span>Fim</span><input type="date" id="${grp}-fim" data-bind="${grp}.fim" value="${o.fim||today()}" max="${today()}"></label>`:""}`;
+}
+function periodLabel(days){return days.length?`${fmtShort(days[0])} a ${fmtShort(days[days.length-1])} · ${days.length} dias`:""}
+function ensureHist(from){
+  if(!S.db||from>=WINDOW_START||S.histBusy||(S.histFrom&&S.histFrom<=from))return;
+  S.histBusy=true;
+  S.db.collection("presencas").where("data",">=",from).where("data","<",WINDOW_START).get()
+    .then(q=>{q.docs.forEach(d=>S.hist.set(d.id,d.data()));S.histFrom=from})
+    .catch(()=>toast("Não foi possível buscar as presenças mais antigas.",true))
+    .finally(()=>{S.histBusy=false;render()});
+}
+function allPres(days){if(days.length)ensureHist(days[0]);return [...S.hist.values(),...S.pres.values()]}
+const histOf=c=>[...new Set([...(Array.isArray(c.historico)?c.historico:[]),c.obraId].filter(Boolean))];
+const withHist=(c,obraId)=>[...new Set([...histOf(c),obraId].filter(Boolean))];
+
+/* ---------- render ---------- */
+function render(){
+  const a=document.activeElement,fid=a&&a.id;let sel=null;
+  try{if(a&&typeof a.selectionStart==="number")sel=[a.selectionStart,a.selectionEnd]}catch{}
+  const main=document.getElementById("main");
+  let h="";
+  if(S.error)h+=`<div class="banner bad">${esc(S.error)}</div>`;
+  else if(S.slow&&!allGot())h+=`<div class="banner">Os dados ainda não responderam. O que aparece abaixo pode estar desatualizado; a página continua tentando.</div>`;
+  if(S.sim)h+=`<div class="banner" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between"><span><b>Simulação:</b> você está vendo o app como encarregado de ${esc(S.sim.obras.map(i=>obraById(i)?.nome).filter(Boolean).join(", "))}. Nada do que for marcado aqui é salvo.</span><button class="btn" data-act="sim-stop">Voltar ao meu perfil</button></div>`;
+  const gate=authGate();
+  const views=gate?[]:allowedViews();
+  if(views.length&&!views.includes(S.view))S.view=views[0];
+  const navEl=document.getElementById("nav"),cm=document.getElementById("cadmenu");
+  if(views.length>1){
+    const cadV=CAD.filter(v=>views.includes(v)),inCad=CAD.includes(S.view);
+    navEl.innerHTML=ORDER.map(k=>k==="CAD"?(cadV.length?`<button type="button" class="navbtn" id="cad-btn" data-act="cad-toggle" aria-haspopup="true" aria-controls="cadmenu" aria-expanded="${!!S.cadOpen}"${inCad?' aria-current="page"':""}>Cadastros<span aria-hidden="true">▾</span></button>`:"")
+      :views.includes(k)?`<a href="#${k}"${k===S.view?' aria-current="page"':""}>${NAV[k]}</a>`:"").join("");
+    cm.innerHTML=cadV.map(v=>`<a href="#${v}"${v===S.view?' aria-current="page"':""}>${NAV[v]}</a>`).join("");
+  }else navEl.innerHTML="";
+  cm.hidden=!(S.cadOpen&&views.length>1);
+  if(!cm.hidden)placeCad();
+  document.getElementById("userbox").innerHTML=gate?"":userChip();
+  if(gate)S.userOpen=false;
+  const um=document.getElementById("usermenu");um.hidden=!(S.userOpen&&S.me);
+  if(!um.hidden){um.innerHTML=userMenu();placeUser()}
+  h+=gate?gate():views.length?({presenca:vPresenca,painel:vPainel,colaboradores:vColabs,empresas:vEmpresas,obras:vObras,relatorios:vRel,acessos:vAcessos,consolidado:vCons,config:vConfig})[S.view]():vAguardando();
+  main.innerHTML=h;
+  if(fid){const e=document.getElementById(fid);if(e&&e!==document.activeElement){e.focus({preventScroll:true});if(sel)try{e.setSelectionRange(sel[0],sel[1])}catch{}}}
+}
+function placeCad(){
+  const b=document.getElementById("cad-btn"),cm=document.getElementById("cadmenu"),hd=document.querySelector("header");if(!b)return;
+  const hr=hd.getBoundingClientRect(),br=b.getBoundingClientRect();
+  cm.style.left=Math.max(8,Math.min(br.left-hr.left,hr.width-cm.offsetWidth-8))+"px";cm.style.top=(br.bottom-hr.top)+"px";
+}
+function closeCad(){if(S.cadOpen||S.userOpen){S.cadOpen=false;S.userOpen=false;render()}}
+function initials(n){const w=String(n||"").trim().split(/\s+/).filter(Boolean);return ((w[0]||"?")[0]+(w.length>1?w[w.length-1][0]:"")).toUpperCase()}
+function avStyle(){const c=S.me&&S.me.color;return c&&/^[#a-z0-9(),.%\s-]+$/i.test(c)?` style="background:${c}"`:""}
+function userChip(){
+  if(!S.me)return "";const nm=S.me.name||"Você";
+  return `<button type="button" class="userbtn" id="user-btn" data-act="user-toggle" aria-haspopup="dialog" aria-controls="usermenu" aria-expanded="${!!S.userOpen}" aria-label="Perfil de ${esc(nm)}"><span class="av"${avStyle()}>${esc(initials(nm))}</span><span class="un">${esc(nm.split(/\s+/)[0])}</span></button>`;
+}
+function userMenu(){
+  const m=S.me,nm=m.name||"Nome não informado",r=role(),p={obras:myObraIds()};
+  const papel=S.sim?"Encarregado (simulação)":r==="RH"?"RH / escritório":r==="ENG"?"Engenharia":r==="ENC"?"Encarregado":r==="LOAD"?"Verificando…":"Aguardando liberação";
+  const obras=(p?.obras||[]).map(i=>obraById(i)?.nome).filter(Boolean);
+  return `<div class="uhead"><span class="av big"${avStyle()}>${esc(initials(nm))}</span><div style="min-width:0"><strong>${esc(nm)}</strong>${m.email?`<div class="small muted">${esc(m.email)}</div>`:""}</div></div>
+  <dl class="udl"><dt>Perfil</dt><dd>${papel}</dd>
+  ${r==="ENC"?`<dt>Obras</dt><dd>${obras.length?obras.map(esc).join("<br>"):"Nenhuma obra liberada"}</dd>`:""}
+  ${ADMIN.has(r)?`<dt>Obras</dt><dd>Todas</dd>`:""}
+  </dl>
+  ${ADMIN.has(r)?`<a class="small" href="#acessos">Gerenciar acessos da equipe</a>`:""}
+  ${S.sim?`<div class="umenu-actions"><button class="btn pri" data-act="sim-stop">Voltar ao meu perfil</button></div>`
+   :realAdmin()&&S.obras.some(o=>o.ativa!==false)?`<div class="umenu-actions" style="flex-direction:column;align-items:stretch"><label class="field"><span>Ver como encarregado da obra</span><select id="sim-obra">${S.obras.filter(o=>o.ativa!==false).map(o=>`<option value="${o.id}"${o.id===S.simPick?" selected":""}>${esc(o.nome)}</option>`).join("")}</select></label><button class="btn" data-act="sim-start">Ver como encarregado</button></div>`:""}
+  <div class="umenu-actions"><button class="btn" data-act="pw-change">Alterar senha</button><button class="btn" data-act="logout">Sair</button></div>`;
+}
+function placeUser(){
+  const b=document.getElementById("user-btn"),um=document.getElementById("usermenu"),hd=document.querySelector("header");if(!b)return;
+  const hr=hd.getBoundingClientRect(),br=b.getBoundingClientRect();
+  um.style.left=Math.max(8,Math.min(br.right-hr.left-um.offsetWidth,hr.width-um.offsetWidth-8))+"px";um.style.top=(br.bottom-hr.top+6)+"px";
+}
+const allGot=()=>S.got.obras&&S.got.empresas&&S.got.colabs&&S.got.pres;
+
+function emptyStart(){
+  return `<div class="panel empty">
+    <h3>Comece pelos cadastros</h3>
+    <p class="muted">A presença diária é lançada por obra, a partir dos colaboradores alocados nela.</p>
+    <ol class="steps">
+      <li><a href="#obras">Cadastre as obras</a> (nome, código e endereço).</li>
+      <li><a href="#empresas">Cadastre as empresas</a>: a sua e as terceirizadas.</li>
+      <li><a href="#colaboradores">Cadastre os colaboradores</a> com função e empresa, e aloque cada um em uma obra. Dá para importar uma lista colada do Excel.</li>
+      <li>Em <a href="#acessos">Acessos</a>, libere os encarregados e vincule cada um à sua obra.</li>
+      <li>Os encarregados marcam presente ou ausente todo dia; você acompanha no Painel.</li>
+    </ol></div>`;
+}
+
+/* ---------- login (Supabase Auth) ---------- */
+const toEmail=u=>String(u||"").trim().toLowerCase()+"@"+CFG.loginDomain;
+const normUser=u=>String(u||"").trim().toLowerCase();
+function myPerfil(){return S.perfis.find(p=>p.id===S.uid)}
+function authGate(){
+  if(S.cfgErr)return ()=>`<div class="lockwrap"><div class="lock"><h2>App não configurado</h2><p class="muted">${esc(S.cfgErr)}</p></div></div>`;
+  if(!S.sb)return ()=>`<div class="lockwrap"><div class="lock"><h2>Carregando…</h2></div></div>`;
+  if(S.setup)return vSetup;
+  if(!S.session)return vLogin;
+  if(S.pwMode==="change")return vSenhaNova;
+  if(!S.perfisSeen)return ()=>`<div class="lockwrap"><div class="lock"><h2>Verificando acesso…</h2></div></div>`;
+  const p=myPerfil();
+  if(!p||p.ativo===false)return vSemAcesso;
+  return null;
+}
+function whoLine(){const m=S.me||{},nm=m.name||"Usuário";return `<div class="who-line"><span class="av">${esc(initials(nm))}</span><div><strong>${esc(nm)}</strong>${m.email?`<div class="small muted">${esc(m.email)}</div>`:""}</div></div>`}
+const errLine=()=>S.loginErr?`<div class="err" role="alert">${esc(S.loginErr)}</div>`:"";
+function vLogin(){
+  return `<div class="lockwrap"><div class="lock"><h2>Acesso ao app</h2>
+    <form id="login-form" autocomplete="on">
+      <label class="field"><span>Usuário</span><input id="login-user" name="username" value="${esc(S.loginUser||"")}" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" required></label>
+      <label class="field"><span>Senha</span><input id="login-pw" name="password" type="password" autocomplete="current-password" required></label>
+      ${errLine()}
+      <button class="btn pri" type="submit"${S.authBusy?" disabled":""}>${S.authBusy?"Entrando…":"Entrar"}</button>
+    </form>
+    <p class="small muted" style="margin:0">Esqueceu a senha? Peça ao RH para redefinir.</p></div></div>`;
+}
+function vSetup(){
+  return `<div class="lockwrap"><div class="lock"><h2>Configuração inicial</h2>
+    <p class="small muted" style="margin:0">Nenhum usuário existe ainda. Crie o primeiro acesso de RH; os demais usuários são criados depois, dentro do app, em Acessos.</p>
+    <form id="setup-form" autocomplete="on">
+      <label class="field"><span>Nome completo</span><input id="su-nome" required autocomplete="name"></label>
+      <label class="field"><span>Usuário</span><input id="su-user" name="username" required autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="username" placeholder="ex.: diego.meneses"></label>
+      <label class="field"><span>Senha</span><input id="su-pw" type="password" minlength="6" required autocomplete="new-password"></label>
+      <label class="field"><span>Confirmar senha</span><input id="su-pw2" type="password" minlength="6" required autocomplete="new-password"></label>
+      ${errLine()}
+      <button class="btn pri" type="submit"${S.authBusy?" disabled":""}>${S.authBusy?"Criando…":"Criar acesso e entrar"}</button>
+    </form></div></div>`;
+}
+function vSenhaNova(){
+  return `<div class="lockwrap"><div class="lock"><h2>Alterar senha</h2>${whoLine()}
+    <form id="pw-form" autocomplete="on">
+      <input type="text" name="username" value="${esc((S.me&&S.me.email)||"")}" autocomplete="username" hidden>
+      <label class="field"><span>Nova senha</span><input id="pw-1" type="password" autocomplete="new-password" minlength="6" required></label>
+      <label class="field"><span>Confirmar senha</span><input id="pw-2" type="password" autocomplete="new-password" minlength="6" required></label>
+      ${errLine()}
+      <div class="row-btns"><button class="btn pri" type="submit"${S.authBusy?" disabled":""}>Salvar senha</button><button type="button" class="btn" data-act="pw-back">Cancelar</button></div>
+    </form></div></div>`;
+}
+function vSemAcesso(){
+  return `<div class="lockwrap"><div class="lock"><h2>Acesso desativado</h2>
+    <p class="muted" style="margin:0">Seu usuário não tem acesso liberado no momento. Fale com o RH.</p>
+    <button class="btn" data-act="logout">Sair</button></div></div>`;
+}
+async function apiUsuarios(acao,body){
+  const {data}=await S.sb.auth.getSession();const tok=data&&data.session&&data.session.access_token;
+  const r=await fetch("/api/usuarios",{method:"POST",headers:{"Content-Type":"application/json",...(tok?{Authorization:"Bearer "+tok}:{})},body:JSON.stringify({acao,...body})});
+  let j={};try{j=await r.json()}catch{}
+  if(!r.ok)throw {apiMsg:j.erro||"Não foi possível concluir. Tente de novo."};
+  return j;
+}
+const msgOf=e=>e&&e.apiMsg?e.apiMsg:errMsg(e);
+document.addEventListener("submit",async ev=>{
+  const f=ev.target;if(!["login-form","setup-form","pw-form"].includes(f.id))return;ev.preventDefault();
+  if(S.authBusy)return;
+  const val=id=>{const e=document.getElementById(id);return e?e.value:""};
+  const V={u:val("login-user"),pw:val("login-pw"),nome:val("su-nome"),su:val("su-user"),a:val("su-pw"),b:val("su-pw2"),n1:val("pw-1"),n2:val("pw-2")};
+  if(f.id==="login-form")S.loginUser=V.u;
+  S.authBusy=true;S.loginErr="";render();
+  try{
+    if(f.id==="login-form"){
+      const u=normUser(V.u),pw=V.pw;
+      const {error}=await S.sb.auth.signInWithPassword({email:toEmail(u),password:pw});
+      if(error)S.loginErr=/invalid|credentials/i.test(error.message)?"Usuário ou senha incorretos.":/banned/i.test(error.message)?"Seu acesso está desativado. Fale com o RH.":"Não foi possível entrar: "+error.message;
+    }else if(f.id==="setup-form"){
+      const nome=V.nome.trim(),u=normUser(V.su),a=V.a,b=V.b;
+      if(a!==b)S.loginErr="As duas senhas não são iguais.";
+      else{await apiUsuarios("configurar",{nome,usuario:u,senha:a});S.setup=false;
+        const {error}=await S.sb.auth.signInWithPassword({email:toEmail(u),password:a});if(error)S.loginErr=error.message}
+    }else{
+      const a=V.n1,b=V.n2;
+      if(a.length<6)S.loginErr="A senha precisa ter pelo menos 6 caracteres.";
+      else if(a!==b)S.loginErr="As duas senhas não são iguais.";
+      else{const {error}=await S.sb.auth.updateUser({password:a});if(error)S.loginErr=/different|same/i.test(error.message)?"A nova senha precisa ser diferente da atual.":error.message;else{S.pwMode="";toast("Senha alterada")}}
+    }
+  }catch(e){S.loginErr=msgOf(e)}
+  S.authBusy=false;render();
+});
+
+/* ---------- presença ---------- *//* ---------- presença ---------- */
+function rowsFor(obraId,key){
+  const saved=getPres(key)||null,d=S.drafts[key],regs=(saved&&saved.registros)||[];
+  const st=d?d.st:Object.fromEntries(regs.map(r=>[r.c,r.s]));
+  const ids=new Set(S.colabs.filter(c=>c.obraId===obraId&&c.ativo!==false).map(c=>c.id));
+  regs.forEach(r=>ids.add(r.c));if(d){Object.keys(d.st).forEach(i=>ids.add(i));Object.keys(d.rm).forEach(i=>ids.delete(i))}
+  const cm=new Map(S.colabs.map(c=>[c.id,c])),old=new Map(regs.map(r=>[r.c,r]));
+  return [...ids].map(id=>{const c=cm.get(id),o=old.get(id)||{};return{id,nome:c?.nome||o.n||"(removido)",funcao:c?.funcao||o.f||"Sem função",vinc:c?.vinculo||o.v||"CLT",empresaId:c?c.empresaId||"":o.e||"",empresa:c?empNome(c):(o.en||"Sem empresa"),alocado:c?.obraId===obraId,s:st[id]||""}})
+    .sort((a,b)=>cmp(a.funcao,b.funcao)||cmp(a.nome,b.nome));
+}
+function vPresenca(){
+  const rh=isRH(),obras=minhasObras();
+  const head=`<div class="head"><div><h2>Presença do dia</h2><p class="lead">${rh?"Marque presente ou ausente para cada colaborador. O total de presentes é o efetivo do dia para o RDO.":"Marque presente ou ausente para cada colaborador da sua obra e toque em Salvar."}</p></div></div>`;
+  if(!obras.length)return head+(rh?emptyStart():`<div class="panel empty"><h3>Nenhuma obra liberada para você</h3><p class="muted">Peça ao RH para vincular a sua obra ao seu acesso.</p></div>`);
+  if(!rh)S.sel.data=today();
+  if(!obras.find(o=>o.id===S.sel.obra))S.sel.obra=obras[0].id;
+  const key=pkey(S.sel.obra,S.sel.data),saved=getPres(key),dirty=!!S.drafts[key];
+  const rows=rowsFor(S.sel.obra,key);
+  const n={P:0,A:0,"":0};rows.forEach(r=>n[r.s]=(n[r.s]||0)+1);
+  const outros=rh?S.colabs.filter(c=>c.ativo!==false&&!rows.find(r=>r.id===c.id)).sort(byNome):[];
+  const groups={};rows.forEach(r=>(groups[r.funcao]=groups[r.funcao]||[]).push(r));
+  let status;
+  if(dirty)status=`<span class="chip warn">Alterações não salvas</span>`;
+  else if(saved){const who=nameOf(saved.atualizadoPor);const t=saved.atualizadoEm?new Date(saved.atualizadoEm).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"";status=`<span class="chip ok">Lançado${t?" em "+t:""}${who?" por "+esc(who):""}</span>`}
+  else status=`<span class="chip">Sem lançamento neste dia</span>`;
+  let h=head+`<div class="panel pad toolbar">
+    ${obras.length>1?`<label class="field grow"><span>Obra</span><select id="p-obra" data-act="p-obra">${obras.map(o=>`<option value="${o.id}"${o.id===S.sel.obra?" selected":""}>${esc(o.nome)}${o.codigo?" · "+esc(o.codigo):""}</option>`).join("")}</select></label>`
+      :`<div class="field grow"><span>Obra</span><strong style="padding-block:10px">${esc(obras[0].nome)}</strong></div>`}
+    ${rh?`<div class="field"><span>Data</span><div class="row-btns" style="flex-wrap:nowrap"><button class="btn sq" data-act="p-prev" aria-label="Dia anterior">‹</button><input id="p-data" type="date" data-act="p-data" value="${S.sel.data}" max="${today()}" style="width:auto"><button class="btn sq" data-act="p-next" aria-label="Próximo dia"${dis(S.sel.data>=today())}>›</button></div></div>`
+      :`<div class="field"><span>Data</span><strong style="padding-block:10px">${fmtD(S.sel.data)}</strong></div>`}
+  </div>
+  <div class="panel pad" style="display:flex;flex-direction:column;gap:12px">
+    <div class="counts"><span class="big" style="color:var(--ok)">${n.P}</span><span>presentes de <b class="num">${rows.length}</b> · ${fmtD(S.sel.data)}</span>${status}</div>
+    <div class="row-btns small"><span class="chip bad">${n.A} ausentes</span>${n[""]?`<span class="chip">${n[""]} sem marcação</span>`:""}</div>
+    <div class="toolbar">
+      <button class="btn" data-act="p-all"${W()}${dis(!n[""])}>Marcar restantes como presentes</button>
+      ${outros.length?`<label class="field grow"><span>Incluir colaborador de outra obra neste dia</span><select id="p-add" data-act="p-add"${W()}><option value="">Escolher…</option>${outros.map(c=>`<option value="${c.id}">${esc(c.nome)} · ${esc(c.funcao||"")} · ${esc(empNome(c))}${c.obraId?" ("+esc(obraById(c.obraId)?.nome||"")+")":""}</option>`).join("")}</select></label>`:""}
+      ${rh&&saved&&S.confirm!=="day"?`<button class="btn danger" data-act="p-delday"${W()}>Excluir lançamento do dia</button>`:""}
+    </div>
+    ${S.confirm==="day"?`<div class="confirm"><span>Excluir todo o lançamento de ${fmtD(S.sel.data)} nesta obra?</span><div class="row-btns"><button class="btn" data-act="cancel-del">Manter</button><button class="btn danger" data-act="p-delday-ok">Excluir</button></div></div>`:""}
+  </div>`;
+  if(!rows.length)h+=`<div class="panel empty"><h3>Nenhum colaborador nesta obra</h3><p class="muted">${rh?`Aloque colaboradores em <a href="#colaboradores">Colaboradores</a> ou inclua alguém de outra obra no campo acima.`:"O RH ainda não alocou colaboradores nesta obra."}</p></div>`;
+  else{
+    h+=`<div class="panel" style="overflow:hidden">`;
+    Object.keys(groups).sort(cmp).forEach(f=>{const g=groups[f];h+=`<div class="grp"><div class="grp-h"><span>${esc(f)}</span><span class="num">${g.filter(r=>r.s==="P").length}/${g.length}</span></div>`;
+      g.forEach(r=>{h+=`<div class="prow"><div class="who"><strong>${esc(r.nome)}</strong><em>${esc(r.empresa)}${r.alocado?"":" · fora da alocação"}</em></div>
+      <div class="seg" role="group" aria-label="Situação de ${esc(r.nome)}">${[["P","Presente"],["A","Ausente"]].map(([s,l])=>`<button data-act="p-st" data-id="${r.id}" data-s="${s}" aria-pressed="${r.s===s}"${W()}>${l}</button>`).join("")}</div>
+      ${rh&&!r.alocado?`<button class="rm" data-act="p-rm" data-id="${r.id}" aria-label="Remover ${esc(r.nome)} deste dia" title="Remover deste dia"${W()}>×</button>`:""}</div>`});
+      h+=`</div>`});
+    h+=`</div>`;
+  }
+  if(dirty||rows.length)h+=`<div class="savebar"><span class="small">${dirty?"Alterações ainda não salvas":"Tudo salvo"}</span><div class="row-btns">${dirty?`<button class="btn ghost" style="color:var(--bar-fg)" data-act="p-discard">Descartar</button>`:""}<button class="btn pri" data-act="p-save"${dis(!dirty||S.saving||!S.canWrite)}>${S.saving?"Salvando…":"Salvar presença"}</button></div></div>`;
+  return h;
+}
+function ensureDraft(key){
+  if(!S.drafts[key]){const saved=getPres(key);S.drafts[key]={st:Object.fromEntries(((saved&&saved.registros)||[]).map(r=>[r.c,r.s])),rm:{}}}
+  return S.drafts[key];
+}
+async function savePres(){
+  if(S.sim){toast("Simulação: a presença não foi salva.");return}
+  const obraId=S.sel.obra,data=S.sel.data,key=pkey(obraId,data);
+  const rows=rowsFor(obraId,key).filter(r=>r.s);
+  const registros=rows.map(r=>({c:r.id,n:r.nome,f:r.funcao,v:r.vinc,e:r.empresaId,en:r.empresa,s:r.s}));
+  const pres=registros.filter(r=>r.s==="P"),count=k=>pres.reduce((m,r)=>(m[r[k]]=(m[r[k]]||0)+1,m),{});
+  const body={obraId,obraNome:obraById(obraId)?.nome||"",data,registros,total:pres.length,
+    ausentes:registros.filter(r=>r.s==="A").length,
+    porFuncao:count("f"),porEmpresa:count("en"),porVinculo:count("v"),
+    atualizadoPor:S.uid||null,atualizadoEm:new Date().toISOString()};
+  S.saving=true;render();
+  try{await S.db.doc("presencas/"+key).set(body);delete S.drafts[key];S.extra.set(key,body);toast(`Presença salva: ${body.total} presentes, ${body.ausentes} ausentes`)}
+  catch(e){toast(errMsg(e),true)}
+  finally{S.saving=false;render()}
+}
+
+/* ---------- acessos ---------- */
+function vAguardando(){
+  return `<div class="panel empty"><h3>Verificando seu acesso…</h3></div>`;
+}
+const PAPEL_NOME={RH:"RH / escritório",ENG:"Engenharia",ENC:"Encarregado"};
+function vAcessos(){
+  const obrasChips=ids=>(ids||[]).map(i=>obraById(i)).filter(Boolean).map(o=>`<span class="chip ok">${esc(o.nome)}</span>`).join("")||`<span class="chip warn">Nenhuma obra</span>`;
+  let h=`<div class="head"><div><h2>Acessos</h2><p class="lead">Usuários do app. O encarregado lança a presença do dia e consulta os relatórios só das obras marcadas; RH e Engenharia veem e alteram tudo.</p></div><button class="btn pri" data-act="us-new">Novo usuário</button></div>`;
+  if(S.editUser){const u=S.editUser,novo=!u.id,self=u.id===S.uid;
+    h+=`<div class="panel pad" style="display:flex;flex-direction:column;gap:14px"><h3>${novo?"Novo usuário":"Editar usuário"}</h3>
+    <div class="form">
+      <label class="field full"><span>Nome completo</span><input id="us-nome" data-bind="user.nome" value="${esc(u.nome||"")}" autocomplete="off"></label>
+      <label class="field"><span>Usuário (login)</span><input id="us-user" data-bind="user.usuario" value="${esc(u.usuario||"")}" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="ex.: joao.pereira"${novo?"":" readonly"}></label>
+      ${novo?`<label class="field"><span>Senha inicial</span><input id="us-pw" data-bind="user.senha" type="text" value="${esc(u.senha||"")}" autocomplete="off" placeholder="mínimo 6 caracteres"></label>`:""}
+      <label class="field"><span>Perfil</span><select id="us-papel" data-bind="user.papel"${self?" disabled":""}>${Object.entries(PAPEL_NOME).map(([k,v])=>`<option value="${k}"${k===u.papel?" selected":""}>${v}</option>`).join("")}</select></label>
+    </div>
+    ${u.papel==="ENC"?`<div class="field"><span>Obras em que lança presença</span><div class="pick">${S.obras.filter(o=>o.ativa!==false||(u.obras||[]).includes(o.id)).map(o=>`<label class="check"><input type="checkbox" id="uo-${o.id}" data-act="us-obra" data-id="${o.id}"${(u.obras||[]).includes(o.id)?" checked":""}> ${esc(o.nome)}</label>`).join("")||`<span class="small muted">Cadastre uma obra primeiro.</span>`}</div></div>`:""}
+    ${novo?"":`<div class="toolbar"><label class="field grow"><span>Redefinir senha</span><input id="us-newpw" type="text" autocomplete="off" placeholder="nova senha (mínimo 6 caracteres)"></label><button class="btn" data-act="us-reset">Redefinir senha</button></div>
+      ${self?"":`<label class="switch"><input type="checkbox" id="us-ativo" data-act="us-ativo"${u.ativo!==false?" checked":""}><span>${u.ativo!==false?"Acesso ativo":"Acesso bloqueado"}</span></label>`}`}
+    ${S.confirm==="user"?`<div class="confirm"><span>Excluir o usuário ${esc(u.usuario)}? A pessoa não conseguirá mais entrar. As presenças que ela lançou continuam salvas.</span><div class="row-btns"><button class="btn" data-act="cancel-del">Manter</button><button class="btn danger" data-act="us-del-ok">Excluir</button></div></div>`:""}
+    <div class="row-btns"><button class="btn pri" data-act="us-save"${S.authBusy?" disabled":""}>${novo?"Criar usuário":"Salvar"}</button><button class="btn" data-act="us-cancel">Cancelar</button>${!novo&&!self?`<button class="btn danger" data-act="us-del" style="margin-left:auto">Excluir</button>`:""}</div>
+    ${novo?`<p class="small muted" style="margin:0">Passe o usuário e a senha inicial para a pessoa. Ela pode trocar a senha depois, no menu com o nome dela.</p>`:""}</div>`}
+  h+=`<div class="panel list">${[...S.perfis].sort((a,b)=>({RH:0,ENG:1}[a.papel]??2)-({RH:0,ENG:1}[b.papel]??2)||cmp(a.nome||"",b.nome||"")).map(p=>`<div class="item"><div class="who" data-act="us-edit" data-id="${p.id}" tabindex="0" role="button"><strong>${esc(p.nome||p.usuario)}${p.id===S.uid?" (você)":""}</strong><div class="meta"><span class="chip num">${esc(p.usuario||"")}</span>${p.papel==="ENC"?`<span class="chip">Encarregado</span>${obrasChips(p.obras)}`:`<span class="chip acc">${p.papel==="RH"?"RH":"Engenharia"}</span>`}${p.ativo===false?`<span class="chip bad">Bloqueado</span>`:""}</div></div></div>`).join("")}</div>`;
+  return h;
+}
+async function saveUser(){
+  const u=S.editUser;
+  if(u.papel==="ENC"&&!(u.obras||[]).length){toast("Marque ao menos uma obra para o encarregado.",true);return}
+  S.authBusy=true;render();
+  try{
+    if(!u.id){
+      const r=await apiUsuarios("criar",{nome:u.nome,usuario:u.usuario,senha:u.senha,papel:u.papel,obras:u.obras||[]});
+      toast(`Usuário ${r.usuario} criado`);
+    }else{
+      if(!(u.nome||"").trim())throw {apiMsg:"Informe o nome."};
+      await S.db.doc("perfis/"+u.id).update({nome:u.nome.trim(),papel:u.papel,obras:u.papel==="ENC"?(u.obras||[]):[]});
+      toast("Usuário atualizado");
+    }
+    S.editUser=null;
+  }catch(e){toast(msgOf(e),true)}
+  S.authBusy=false;render();
+}
+
+/* ---------- painel ---------- *//* ---------- painel ---------- */
+function barList(obj,max){
+  const ent=Object.entries(obj).sort((a,b)=>b[1]-a[1]||cmp(a[0],b[0]));const top=Math.max(1,...ent.map(e=>e[1]));
+  const shown=ent.slice(0,max),rest=ent.slice(max).reduce((s,e)=>s+e[1],0);
+  if(rest)shown.push(["Outros",rest]);
+  if(!shown.length)return `<p class="small muted">Sem registros.</p>`;
+  return `<div class="bars">${shown.map(([k,v])=>`<div class="bar"><div class="lbl"><i style="width:${Math.round(v/top*100)}%"></i><span>${esc(k)}</span></div><b>${v}</b></div>`).join("")}</div>`;
+}
+function vPainel(){
+  if(!S.obras.length)return `<div class="head"><div><h2>Painel do efetivo</h2></div></div>`+emptyStart();
+  const d=S.painelData,ativas=S.obras.filter(o=>o.ativa!==false);
+  let presTot=0,semLanc=0,porEmp={};
+  const cards=ativas.map(o=>{
+    const p=getPres(pkey(o.id,d));
+    if(p){presTot+=p.total||0;Object.entries(p.porEmpresa||{}).forEach(([k,v])=>porEmp[k]=(porEmp[k]||0)+v)}else semLanc++;
+    return `<div class="card"><div class="top"><div style="min-width:0"><h3>${esc(o.nome)}</h3><div class="small muted">${esc([o.codigo,o.endereco].filter(Boolean).join(" · "))||"&nbsp;"}</div></div>${p?`<span class="chip ok">Lançado</span>`:`<span class="chip warn">Sem lançamento</span>`}</div>
+      <div class="fig">${p?p.total:"–"}<small> presentes</small></div>
+      ${p?`<div class="small muted">${p.ausentes||0} ausentes</div>
+      <div class="subhead">Presentes por empresa</div>${barList(p.porEmpresa||{},5)}
+      <div class="subhead">Presentes por função</div>${barList(p.porFuncao||{},6)}`:`<p class="small muted">A presença deste dia ainda não foi lançada.</p>`}
+      <a class="small" href="#presenca" data-act="go-pres" data-id="${o.id}">Abrir presença desta obra</a></div>`}).join("");
+  return `<div class="head"><div><h2>Painel do efetivo</h2><p class="lead">Efetivo presente em cada obra no dia escolhido.</p></div>
+    <label class="field"><span>Dia</span><input id="pn-data" type="date" data-act="pn-data" value="${d}" max="${today()}"></label></div>
+  <div class="tiles">
+    <div class="tile"><b>${presTot}</b><span>presentes em ${fmtD(d)}</span></div>
+    <div class="tile"><b>${ativas.length}</b><span>obras ativas</span></div>
+    <div class="tile${semLanc?" alert":""}"><b>${semLanc}</b><span>obras sem lançamento no dia</span></div>
+  </div>
+  ${Object.keys(porEmp).length?`<div class="panel pad" style="display:flex;flex-direction:column;gap:8px"><h3>Presentes por empresa · todas as obras</h3>${barList(porEmp,10)}</div>`:""}
+  <div class="cards">${cards}</div>`;
+}
+
+/* ---------- colaboradores ---------- */
+function colabForm(){
+  const c=S.editColab,isNew=!c.id;
+  return `<div class="panel pad" style="display:flex;flex-direction:column;gap:14px"><h3>${isNew?"Novo colaborador":"Editar colaborador"}</h3>
+  <div class="form">
+    <label class="field full"><span>Nome completo</span><input id="fc-nome" data-bind="colab.nome" value="${esc(c.nome)}" autocomplete="off"></label>
+    <label class="field"><span>Função</span><select id="fc-funcao" data-bind="colab.funcao"><option value="">Escolher…</option>${[...funcoes(),...(c.funcao&&!funcoes().includes(c.funcao)?[c.funcao]:[])].map(f=>`<option value="${esc(f)}"${f===c.funcao?" selected":""}>${esc(f)}</option>`).join("")}</select><a class="small" href="#config">Gerenciar funções</a></label>
+    <label class="field"><span>Empresa</span><select id="fc-emp" data-bind="colab.empresaId"><option value="">Sem empresa</option>${S.empresas.map(e=>`<option value="${e.id}"${e.id===c.empresaId?" selected":""}>${esc(e.nome)}</option>`).join("")}</select></label>
+    <label class="field"><span>Vínculo</span><select id="fc-vinc" data-bind="colab.vinculo">${Object.entries(VINC).map(([k,v])=>`<option value="${k}"${k===c.vinculo?" selected":""}>${v}</option>`).join("")}</select></label>
+    <label class="field"><span>Obra alocada</span><select id="fc-obra" data-bind="colab.obraId"><option value="">Sem obra</option>${S.obras.filter(o=>o.ativa!==false||o.id===c.obraId).map(o=>`<option value="${o.id}"${o.id===c.obraId?" selected":""}>${esc(o.nome)}</option>`).join("")}</select></label>
+    <label class="field"><span>Matrícula / documento</span><input id="fc-mat" data-bind="colab.matricula" value="${esc(c.matricula)}" autocomplete="off"></label>
+    <label class="check"><input type="checkbox" id="fc-ativo" data-bind="colab.ativo"${c.ativo!==false?" checked":""}> Ativo</label>
+  </div>
+  ${!S.empresas.length?`<p class="small muted">Nenhuma empresa cadastrada ainda. <a href="#empresas">Cadastre as empresas</a> para vincular os colaboradores.</p>`:""}
+  ${S.confirm==="colab"?`<div class="confirm"><span>Excluir ${esc(c.nome)} do cadastro? As presenças já lançadas continuam salvas; para tirá-lo de um dia, abra o dia em Presença e remova.</span><div class="row-btns"><button class="btn" data-act="cancel-del">Manter</button><button class="btn danger" data-act="fc-del-ok">Excluir</button></div></div>`:""}
+  <div class="row-btns"><button class="btn pri" data-act="fc-save"${W()}>Salvar</button><button class="btn" data-act="fc-cancel">Cancelar</button>${!isNew?`<button class="btn danger" data-act="fc-del" style="margin-left:auto"${W()}>Excluir</button>`:""}</div></div>`;
+}
+function importPanel(){
+  const lines=parseImport(S.importText);
+  return `<div class="panel pad" style="display:flex;flex-direction:column;gap:12px"><h3>Importar lista</h3>
+  <p class="small muted">Cole uma linha por colaborador, com colunas separadas por ponto e vírgula ou copiadas direto do Excel: <span class="num">Nome; Função; Empresa; Vínculo</span>. Empresas que ainda não existem são cadastradas automaticamente. Vínculo aceita Próprio, Terceirizado ou Diarista; vazio vira Próprio.</p>
+  <textarea id="imp-text" data-bind="imp.text" placeholder="Nome; Função; Empresa; Vínculo">${esc(S.importText)}</textarea>
+  <div class="toolbar"><label class="field grow"><span>Alocar todos na obra</span><select id="imp-obra" data-bind="imp.obra"><option value="">Sem obra</option>${S.obras.filter(o=>o.ativa!==false).map(o=>`<option value="${o.id}"${o.id===S.importObra?" selected":""}>${esc(o.nome)}</option>`).join("")}</select></label>
+  <button class="btn pri" data-act="imp-go"${W()}${dis(!lines.length)}>Importar ${lines.length||""} colaboradores</button><button class="btn" data-act="imp-close">Fechar</button></div></div>`;
+}
+function parseImport(t){
+  return t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{const p=l.split(/\t|;/).map(x=>x.trim());
+    const v=(p[3]||"").toLowerCase();return{nome:p[0],funcao:p[1]||"",empresa:p[2]||"",vinculo:/ter/.test(v)?"TER":/(dia|aut)/.test(v)?"DIA":"CLT"}}).filter(x=>x.nome&&!/^nome$/i.test(x.nome));
+}
+function vColabs(){
+  const q=S.cf.q.trim().toLowerCase();
+  const list=S.colabs.filter(c=>(!q||(c.nome+" "+(c.funcao||"")+" "+empNome(c)+" "+(c.matricula||"")).toLowerCase().includes(q))
+    &&(!S.cf.obra||(S.cf.obra==="_none"?!c.obraId:c.obraId===S.cf.obra))&&(!S.cf.emp||(S.cf.emp==="_none"?!c.empresaId:c.empresaId===S.cf.emp))).sort(byNome);
+  const nsel=[...S.selC].filter(id=>list.find(c=>c.id===id)).length;
+  let h=`<div class="head"><div><h2>Colaboradores</h2><p class="lead">${S.colabs.filter(c=>c.ativo!==false).length} ativos. Toque no nome para editar ou mudar de obra.</p></div>
+    <div class="row-btns"><button class="btn" data-act="imp-open"${W()}>Importar lista</button><button class="btn pri" data-act="fc-new"${W()}>Novo colaborador</button></div></div>`;
+  if(S.editColab)h+=colabForm();
+  if(S.showImport)h+=importPanel();
+  h+=`<div class="panel pad toolbar">
+    <label class="field grow"><span>Buscar</span><input id="cf-q" type="search" data-bind="cf.q" value="${esc(S.cf.q)}" placeholder="Nome, função, empresa ou matrícula"></label>
+    <label class="field grow"><span>Obra</span><select id="cf-obra" data-bind="cf.obra"><option value="">Todas</option><option value="_none"${S.cf.obra==="_none"?" selected":""}>Sem obra</option>${S.obras.map(o=>`<option value="${o.id}"${o.id===S.cf.obra?" selected":""}>${esc(o.nome)}</option>`).join("")}</select></label>
+    <label class="field grow"><span>Empresa</span><select id="cf-emp" data-bind="cf.emp"><option value="">Todas</option><option value="_none"${S.cf.emp==="_none"?" selected":""}>Sem empresa</option>${S.empresas.map(e=>`<option value="${e.id}"${e.id===S.cf.emp?" selected":""}>${esc(e.nome)}</option>`).join("")}</select></label>
+  </div>`;
+  if(nsel)h+=`<div class="panel pad toolbar"><span><b>${nsel}</b> selecionados</span><label class="field grow"><span>Transferir para a obra</span><select id="bulk-obra"><option value="">Sem obra</option>${S.obras.filter(o=>o.ativa!==false).map(o=>`<option value="${o.id}">${esc(o.nome)}</option>`).join("")}</select></label><button class="btn pri" data-act="bulk-go"${W()}>Transferir</button><button class="btn" data-act="bulk-clear">Limpar seleção</button></div>`;
+  if(!S.colabs.length)h+=`<div class="panel empty"><h3>Nenhum colaborador cadastrado</h3><p class="muted">Use <b>Novo colaborador</b> para cadastrar um a um, ou <b>Importar lista</b> para colar a relação da folha ou do terceiro de uma vez.</p></div>`;
+  else if(!list.length)h+=`<div class="panel empty"><p class="muted">Nenhum colaborador encontrado com esses filtros.</p></div>`;
+  else h+=`<div class="panel list">${list.map(c=>`<div class="item"><input type="checkbox" id="sel-${c.id}" data-act="selc" data-id="${c.id}"${S.selC.has(c.id)?" checked":""} aria-label="Selecionar ${esc(c.nome)}">
+    <div class="who" data-act="fc-edit" data-id="${c.id}" tabindex="0" role="button"><strong>${esc(c.nome)}</strong><div class="meta"><span class="chip">${esc(c.funcao||"Sem função")}</span><span class="chip acc">${esc(empNome(c))}</span><span class="chip">${VINC[c.vinculo]||"Próprio"}</span>${c.obraId?`<span class="chip ok">${esc(obraById(c.obraId)?.nome||"Obra removida")}</span>`:`<span class="chip warn">Sem obra</span>`}${c.ativo===false?`<span class="chip bad">Inativo</span>`:""}</div></div></div>`).join("")}</div>`;
+  return h;
+}
+async function saveColab(){
+  const c=S.editColab,nome=(c.nome||"").trim();if(!nome){toast("Informe o nome do colaborador.",true);return}
+  const body={nome,funcao:(c.funcao||"").trim(),empresaId:c.empresaId||"",vinculo:c.vinculo||"CLT",obraId:c.obraId||"",historico:withHist(c,c.obraId),matricula:(c.matricula||"").trim(),ativo:c.ativo!==false,atualizadoEm:new Date().toISOString()};
+  try{if(c.id)await S.db.doc("colaboradores/"+c.id).set({...body,criadoEm:c.criadoEm||body.atualizadoEm});else await S.db.collection("colaboradores").add({...body,criadoEm:body.atualizadoEm});
+    toast(c.id?"Colaborador atualizado":"Colaborador cadastrado");S.editColab=null;render()}catch(e){toast(errMsg(e),true)}
+}
+async function runImport(){
+  const lines=parseImport(S.importText);if(!lines.length)return;
+  const empMap=new Map(S.empresas.map(e=>[e.nome.trim().toLowerCase(),e.id]));let ok=0;
+  const lista=[...funcoes()],low=new Set(lista.map(f=>f.toLowerCase()));
+  lines.forEach(l=>{if(!l.funcao)return;const m=lista.find(f=>f.toLowerCase()===l.funcao.toLowerCase());if(m)l.funcao=m;else if(!low.has(l.funcao.toLowerCase())){lista.push(l.funcao);low.add(l.funcao.toLowerCase())}});
+  if(lista.length!==funcoes().length){try{await saveFuncoes(lista)}catch(e){toast(errMsg(e),true);return}}
+  try{
+    for(const l of lines){
+      let eid="";const en=l.empresa.trim();
+      if(en){eid=empMap.get(en.toLowerCase());if(!eid){const ref=await S.db.collection("empresas").add({nome:en,cnpj:"",tipo:"TERC",contato:"",criadoEm:new Date().toISOString()});eid=ref.id;empMap.set(en.toLowerCase(),eid)}}
+      const now=new Date().toISOString();
+      await S.db.collection("colaboradores").add({nome:l.nome,funcao:l.funcao,empresaId:eid,vinculo:l.vinculo,obraId:S.importObra||"",historico:S.importObra?[S.importObra]:[],matricula:"",ativo:true,criadoEm:now,atualizadoEm:now});ok++;
+    }
+    toast(`${ok} colaboradores importados`);S.importText="";S.showImport=false;render();
+  }catch(e){toast(`${ok} importados antes do erro. `+errMsg(e),true)}
+}
+
+/* ---------- empresas ---------- */
+function vEmpresas(){
+  const d=today();const presHoje={};
+  S.obras.forEach(o=>{const p=getPres(pkey(o.id,d));if(p)Object.entries(p.porEmpresa||{}).forEach(([k,v])=>presHoje[k]=(presHoje[k]||0)+v)});
+  let h=`<div class="head"><div><h2>Empresas</h2><p class="lead">A construtora e as terceirizadas que fornecem mão de obra. Cada colaborador fica vinculado a uma delas.</p></div><button class="btn pri" data-act="fe-new"${W()}>Nova empresa</button></div>`;
+  if(S.editEmp){const e=S.editEmp,n=S.colabs.filter(c=>c.empresaId===e.id).length;
+    h+=`<div class="panel pad" style="display:flex;flex-direction:column;gap:14px"><h3>${e.id?"Editar empresa":"Nova empresa"}</h3><div class="form">
+    <label class="field full"><span>Razão social ou nome</span><input id="fe-nome" data-bind="emp.nome" value="${esc(e.nome)}" autocomplete="off"></label>
+    <label class="field"><span>CNPJ</span><input id="fe-cnpj" data-bind="emp.cnpj" value="${esc(e.cnpj)}" inputmode="numeric" placeholder="00.000.000/0000-00" autocomplete="off"></label>
+    <label class="field"><span>Tipo</span><select id="fe-tipo" data-bind="emp.tipo"><option value="PROP"${e.tipo==="PROP"?" selected":""}>Própria (construtora)</option><option value="TERC"${e.tipo!=="PROP"?" selected":""}>Terceirizada / empreiteira</option></select></label>
+    <label class="field"><span>Contato</span><input id="fe-contato" data-bind="emp.contato" value="${esc(e.contato)}" placeholder="Responsável e telefone" autocomplete="off"></label></div>
+    ${e.id?empTeam(e):""}
+    ${S.confirm==="emp"?`<div class="confirm"><span>${n?`${n} colaboradores ficarão sem empresa. `:""}Excluir ${esc(e.nome)} do cadastro? As presenças já lançadas com esta empresa continuam salvas e devem ser removidas dia a dia, se necessário.</span><div class="row-btns"><button class="btn" data-act="cancel-del">Manter</button><button class="btn danger" data-act="fe-del-ok">Excluir</button></div></div>`:""}
+    <div class="row-btns"><button class="btn pri" data-act="fe-save"${W()}>Salvar</button><button class="btn" data-act="fe-cancel">Cancelar</button>${e.id?`<button class="btn danger" data-act="fe-del" style="margin-left:auto"${W()}>Excluir</button>`:""}</div></div>`}
+  if(!S.empresas.length)h+=`<div class="panel empty"><h3>Nenhuma empresa cadastrada</h3><p class="muted">Cadastre primeiro a sua construtora e depois cada empreiteira ou prestadora. Ao importar colaboradores, empresas novas também são criadas a partir da lista.</p></div>`;
+  else h+=`<div class="panel list">${[...S.empresas].sort((a,b)=>(a.tipo==="PROP"?0:1)-(b.tipo==="PROP"?0:1)||byNome(a,b)).map(e=>{const cs=S.colabs.filter(c=>c.empresaId===e.id&&c.ativo!==false);const obras=new Set(cs.map(c=>c.obraId).filter(Boolean));
+    return `<div class="item"><div class="who" data-act="fe-edit" data-id="${e.id}" tabindex="0" role="button"><strong>${esc(e.nome)}</strong><div class="meta"><span class="chip ${e.tipo==="PROP"?"acc":""}">${e.tipo==="PROP"?"Própria":"Terceirizada"}</span>${e.cnpj?`<span class="chip num">${esc(e.cnpj)}</span>`:""}<span class="chip">${cs.length} colaboradores</span><span class="chip">${obras.size} obras</span><span class="chip ok">${presHoje[e.nome]||0} presentes hoje</span></div>${e.contato?`<div class="small muted" style="margin-top:4px">${esc(e.contato)}</div>`:""}</div></div>`}).join("")}</div>`;
+  return h;
+}
+function empTeam(e){
+  const cs=S.colabs.filter(c=>c.empresaId===e.id).sort((a,b)=>((b.ativo!==false)-(a.ativo!==false))||byNome(a,b));
+  const on=cs.filter(c=>c.ativo!==false).length;
+  return `<div class="field"><span>Colaboradores da empresa</span></div>
+  <p class="small muted" style="margin:-8px 0 0">Inative quem saiu da empresa ou não está trabalhando em nenhuma obra no momento. Inativos somem da presença diária e dos totais de alocados, mas o histórico fica salvo. As mudanças são salvas na hora.</p>
+  <div class="team"><div class="grp-h"><span>${on} ativos de ${cs.length}</span></div>
+  ${cs.length?cs.map(c=>{const ob=c.obraId?obraById(c.obraId):null,glob=c.ativo!==false;
+    return `<div class="item${glob?"":" off"}"><div class="who"><strong>${esc(c.nome)}</strong><em>${esc(c.funcao||"Sem função")} · ${ob?esc(ob.nome):"Sem obra"}</em></div>
+    <label class="switch"><input type="checkbox" id="eg-${c.id}" data-act="emp-tog" data-id="${c.id}"${glob?" checked":""}${W()}><span>${glob?"Ativo":"Inativo"}</span></label></div>`}).join(""):`<div class="empty"><p class="muted">Nenhum colaborador cadastrado nesta empresa.</p></div>`}</div>`;
+}
+async function saveEmp(){
+  const e=S.editEmp,nome=(e.nome||"").trim();if(!nome){toast("Informe o nome da empresa.",true);return}
+  if(S.empresas.find(x=>x.id!==e.id&&x.nome.trim().toLowerCase()===nome.toLowerCase())){toast("Já existe uma empresa com esse nome.",true);return}
+  const body={nome,cnpj:(e.cnpj||"").trim(),tipo:e.tipo||"TERC",contato:(e.contato||"").trim(),criadoEm:e.criadoEm||new Date().toISOString()};
+  try{if(e.id)await S.db.doc("empresas/"+e.id).set(body);else await S.db.collection("empresas").add(body);toast(e.id?"Empresa atualizada":"Empresa cadastrada");S.editEmp=null;render()}catch(err){toast(errMsg(err),true)}
+}
+
+/* ---------- obras ---------- */
+function vObras(){
+  let h=`<div class="head"><div><h2>Obras</h2><p class="lead">Obras encerradas saem da presença diária, mas o histórico continua nos relatórios.</p></div><button class="btn pri" data-act="fo-new"${W()}>Nova obra</button></div>`;
+  if(S.editObra){const o=S.editObra,n=S.colabs.filter(c=>c.obraId===o.id).length;
+    h+=`<div class="panel pad" style="display:flex;flex-direction:column;gap:14px"><h3>${o.id?"Editar obra":"Nova obra"}</h3><div class="form">
+    <label class="field full"><span>Nome da obra</span><input id="fo-nome" data-bind="obra.nome" value="${esc(o.nome)}" autocomplete="off"></label>
+    <label class="field"><span>Código / centro de custo</span><input id="fo-cod" data-bind="obra.codigo" value="${esc(o.codigo)}" autocomplete="off"></label>
+    <label class="field"><span>Endereço ou cidade</span><input id="fo-end" data-bind="obra.endereco" value="${esc(o.endereco)}" autocomplete="off"></label>
+    <label class="check"><input type="checkbox" id="fo-ativa" data-bind="obra.ativa"${o.ativa!==false?" checked":""}> Obra em andamento</label></div>
+    ${o.id?teamPanel(o):`<p class="small muted">Depois de salvar a obra, abra-a de novo para montar a equipe.</p>`}
+    ${S.confirm==="obra"?`<div class="confirm"><span>${n?`${n} colaboradores alocados ficarão sem obra. `:""}Excluir ${esc(o.nome)}? As presenças já lançadas continuam nos relatórios.</span><div class="row-btns"><button class="btn" data-act="cancel-del">Manter</button><button class="btn danger" data-act="fo-del-ok">Excluir</button></div></div>`:""}
+    <div class="row-btns"><button class="btn pri" data-act="fo-save"${W()}>Salvar</button><button class="btn" data-act="fo-cancel">Cancelar</button>${o.id?`<button class="btn danger" data-act="fo-del" style="margin-left:auto"${W()}>Excluir</button>`:""}</div></div>`}
+  if(!S.obras.length)h+=`<div class="panel empty"><h3>Nenhuma obra cadastrada</h3><p class="muted">Use <b>Nova obra</b> para cadastrar a primeira. Depois aloque os colaboradores nela.</p></div>`;
+  else h+=`<div class="panel list">${[...S.obras].sort((a,b)=>(a.ativa===false)-(b.ativa===false)||byNome(a,b)).map(o=>{const cs=S.colabs.filter(c=>c.obraId===o.id&&c.ativo!==false);const emps=new Set(cs.map(c=>c.empresaId));const p=getPres(pkey(o.id,today()));
+    return `<div class="item"><div class="who" data-act="fo-edit" data-id="${o.id}" tabindex="0" role="button"><strong>${esc(o.nome)}</strong><div class="meta">${o.ativa===false?`<span class="chip">Encerrada</span>`:`<span class="chip ok">Em andamento</span>`}${o.codigo?`<span class="chip num">${esc(o.codigo)}</span>`:""}<span class="chip">${cs.length} ativos</span><span class="chip">${emps.size} empresas</span>${o.ativa!==false?(p?`<span class="chip ok">${p.total} presentes hoje</span>`:`<span class="chip warn">Sem lançamento hoje</span>`):""}</div>${o.endereco?`<div class="small muted" style="margin-top:4px">${esc(o.endereco)}</div>`:""}</div></div>`}).join("")}</div>`;
+  return h;
+}
+function teamPanel(o){
+  const team=S.colabs.filter(c=>c.obraId===o.id||histOf(c).includes(o.id));
+  const on=team.filter(c=>c.obraId===o.id&&c.ativo!==false);
+  const empIds=[...new Set(team.map(c=>c.empresaId||""))];
+  const list=team.filter(c=>!S.teamF||(c.empresaId||"")===S.teamF).sort((a,b)=>((b.obraId===o.id)-(a.obraId===o.id))||cmp(empNome(a),empNome(b))||byNome(a,b));
+  const fora=S.colabs.filter(c=>c.ativo!==false&&!team.includes(c)).sort((a,b)=>cmp(empNome(a),empNome(b))||byNome(a,b));
+  return `<div class="field"><span>Equipe desta obra</span></div>
+  <p class="small muted" style="margin:-8px 0 0">Ative quem está trabalhando nesta obra agora. Quem sai fica inativo e continua no histórico; só os ativos aparecem na presença diária. Ativar alguém que está em outra obra transfere a pessoa para cá. As mudanças são salvas na hora.</p>
+  <div class="team">
+    <div class="grp-h"><span>${on.length} ativos de ${team.length} vinculados</span>
+      ${empIds.length>1?`<select id="team-f" data-bind="team.f" style="width:auto;min-height:34px;padding:4px 8px;font-size:13px;text-transform:none;letter-spacing:0"><option value="">Todas as empresas</option>${empIds.map(e=>`<option value="${e}"${e===S.teamF?" selected":""}>${esc(empById(e)?.nome||"Sem empresa")}</option>`).join("")}</select>`:""}</div>
+    ${list.length?list.map(c=>{const here=c.obraId===o.id,glob=c.ativo!==false,other=c.obraId&&!here?obraById(c.obraId):null;
+      return `<div class="item${here&&glob?"":" off"}"><div class="who"><strong>${esc(c.nome)}</strong><em>${esc(c.funcao||"Sem função")} · ${esc(empNome(c))}${other?` · ativo em ${esc(other.nome)}`:""}${!glob?" · inativo na empresa":""}</em></div>
+      <label class="switch"><input type="checkbox" id="tg-${c.id}" data-act="team-tog" data-id="${c.id}"${here&&glob?" checked":""}${W()}${dis(!glob)}><span>${here&&glob?"Ativo":"Inativo"}</span></label></div>`}).join(""):`<div class="empty"><p class="muted">Nenhum colaborador vinculado ainda.</p></div>`}
+  </div>
+  ${fora.length?`<label class="field"><span>Adicionar colaborador à obra</span><select id="team-add" data-act="team-add"${W()}><option value="">Escolher…</option>${fora.map(c=>`<option value="${c.id}">${esc(c.nome)} · ${esc(c.funcao||"")} · ${esc(empNome(c))}${c.obraId?" (em "+esc(obraById(c.obraId)?.nome||"")+")":""}</option>`).join("")}</select></label>`:""}`;
+}
+async function teamToggle(cid,on){
+  const c=S.colabs.find(x=>x.id===cid),oid=S.editObra&&S.editObra.id;if(!c||!oid)return;
+  const prev=c.obraId&&c.obraId!==oid?obraById(c.obraId):null;
+  try{
+    await S.db.doc("colaboradores/"+cid).update({obraId:on?oid:(c.obraId===oid?"":c.obraId),historico:withHist(c,oid),atualizadoEm:new Date().toISOString()});
+    toast(on?(prev?`${c.nome} transferido de ${prev.nome}`:`${c.nome} ativo nesta obra`):`${c.nome} inativo nesta obra`);
+  }catch(e){toast(errMsg(e),true);render()}
+}
+async function saveObra(){
+  const o=S.editObra,nome=(o.nome||"").trim();if(!nome){toast("Informe o nome da obra.",true);return}
+  const body={nome,codigo:(o.codigo||"").trim(),endereco:(o.endereco||"").trim(),ativa:o.ativa!==false,criadoEm:o.criadoEm||new Date().toISOString()};
+  try{if(o.id)await S.db.doc("obras/"+o.id).set(body);else await S.db.collection("obras").add(body);toast(o.id?"Obra atualizada":"Obra cadastrada");S.editObra=null;render()}catch(e){toast(errMsg(e),true)}
+}
+
+/* ---------- relatórios ---------- */
+const POR={funcao:["porFuncao","Função"],empresa:["porEmpresa","Empresa"],vinculo:["porVinculo","Vínculo"]};
+function repData(){
+  const days=periodDays(S.rep);
+  const field=POR[S.rep.por][0],lab=k=>S.rep.por==="vinculo"?(VINC[k]||k):k;
+  const ok=new Set(repObras().map(o=>o.id));
+  const docs=allPres(days).filter(p=>ok.has(p.obraId)&&(S.rep.obra==="all"||p.obraId===S.rep.obra));
+  const per=days.map(d=>({d,g:{},tot:0,has:false}));const idx=new Map(days.map((d,i)=>[d,i]));const rows=[];
+  docs.forEach(p=>{const i=idx.get(p.data);if(i===undefined)return;const r=per[i];r.has=true;r.tot+=p.total||0;
+    Object.entries(p[field]||{}).forEach(([k,v])=>{const K=lab(k);r.g[K]=(r.g[K]||0)+v;rows.push([p.data,p.obraNome||obraById(p.obraId)?.nome||"",POR[S.rep.por][1],K,v])})});
+  const totals={};per.forEach(r=>Object.entries(r.g).forEach(([k,v])=>totals[k]=(totals[k]||0)+v));
+  let keys=Object.keys(totals).sort((a,b)=>totals[b]-totals[a]);
+  if(keys.length>8){const keep=keys.slice(0,7);per.forEach(r=>{let o=0;Object.keys(r.g).forEach(k=>{if(!keep.includes(k)){o+=r.g[k];delete r.g[k]}});if(o)r.g["Outros"]=o});keys=[...keep,"Outros"]}
+  return{per,keys,totals,rows,days};
+}
+function niceMax(v){if(v<=5)return 5;const p=Math.pow(10,Math.floor(Math.log10(v)));const n=v/p;return (n<=1?1:n<=2?2:n<=5?5:10)*p}
+function chartSVG(per,keys){
+  const W=760,H=280,L=36,R=8,T=12,B=34,iw=W-L-R,ih=H-T-B;
+  const top=Math.max(1,...per.map(r=>r.tot)),step=Math.max(1,niceMax(top/4)>top/4*2.5?Math.ceil(top/4):niceMax(top/4)),nT=Math.max(1,Math.ceil(top/step)),mx=step*nT;const bw=iw/per.length,gap=Math.min(4,bw*.25);
+  const col=k=>`var(--c${keys.indexOf(k)+1})`;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Histograma do efetivo diário">`;
+  for(let i=0;i<=nT;i++){const v=step*i,y=T+ih-ih*i/nT;s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y+3}" text-anchor="end">${Math.round(v)}</text>`}
+  const every=Math.ceil(per.length/12);
+  per.forEach((r,i)=>{const x=L+i*bw+gap/2,w=Math.max(1,bw-gap);let y=T+ih;
+    if(!r.has)s+=`<rect x="${x}" y="${T+ih-3}" width="${w}" height="3" fill="var(--line)"><title>${fmtD(r.d)}: sem lançamento</title></rect>`;
+    keys.forEach(k=>{const v=r.g[k]||0;if(!v)return;const hgt=ih*v/mx;y-=hgt;s+=`<rect x="${x}" y="${y}" width="${w}" height="${hgt}" fill="${col(k)}"><title>${fmtD(r.d)} · ${esc(k)}: ${v}</title></rect>`});
+    if(i%every===0||i===per.length-1)s+=`<text x="${x+w/2}" y="${H-B+16}" text-anchor="middle">${fmtShort(r.d)}</text>`});
+  return s+`</svg>`;
+}
+function vRel(){
+  const obs=repObras(),rh=isRH();
+  if(!obs.length)return `<div class="head"><div><h2>Relatórios</h2></div></div>`+(rh?emptyStart():`<div class="panel empty"><h3>Nenhuma obra liberada para você</h3><p class="muted">Peça ao RH para vincular a sua obra ao seu acesso.</p></div>`);
+  if(S.rep.obra!=="all"&&!obs.find(o=>o.id===S.rep.obra))S.rep.obra="all";
+  const {per,keys,totals,days}=repData();const lanc=per.filter(r=>r.has);
+  const hd=lanc.reduce((s,r)=>s+r.tot,0),media=lanc.length?hd/lanc.length:0;const pico=lanc.reduce((m,r)=>r.tot>(m?.tot||-1)?r:m,null);
+  const allKeys=Object.keys(totals).sort((a,b)=>totals[b]-totals[a]);
+  const picoK=k=>Math.max(0,...per.map(r=>r.g[k]||0));
+  let h=`<div class="head"><div><h2>Relatórios</h2><p class="lead">Histograma do efetivo presente por dia. Homem-dia é a soma dos presentes no período.</p></div></div>
+  <div class="panel pad toolbar">
+    <label class="field grow"><span>Obra</span><select id="r-obra" data-bind="rep.obra">${obs.length>1||rh?`<option value="all">${rh?"Todas as obras":"Todas as minhas obras"}</option>`:""}${obs.map(o=>`<option value="${o.id}"${o.id===S.rep.obra?" selected":""}>${esc(o.nome)}</option>`).join("")}</select></label>
+    ${periodFields("rep",S.rep)}
+    <label class="field"><span>Agrupar por</span><select id="r-por" data-bind="rep.por">${Object.entries(POR).map(([k,v])=>`<option value="${k}"${k===S.rep.por?" selected":""}>${v[1]}</option>`).join("")}</select></label>
+    ${rh?`<button class="btn" data-act="r-csv"${dis(!S.dl||!lanc.length)}>Exportar CSV</button>`:""}
+  </div>
+  <div class="tiles"><div class="tile"><b>${Math.round(media)}</b><span>efetivo médio por dia lançado</span></div>
+    <div class="tile"><b>${pico?pico.tot:0}</b><span>pico${pico?" em "+fmtShort(pico.d):""}</span></div>
+    <div class="tile"><b>${hd}</b><span>homens-dia no período</span></div>
+    <div class="tile${per.length-lanc.length?" alert":""}"><b>${per.length-lanc.length}</b><span>dias sem lançamento</span></div></div>
+  <p class="small muted">${periodLabel(days)}${S.histBusy?" · buscando presenças mais antigas…":""}</p>`;
+  if(!lanc.length)return h+`<div class="panel empty"><h3>Sem presenças no período</h3><p class="muted">Os gráficos aparecem assim que houver presença salva em <a href="#presenca">Presença</a>.</p></div>`;
+  h+=`<div class="panel pad" style="display:flex;flex-direction:column;gap:12px"><h3>Efetivo diário por ${POR[S.rep.por][1].toLowerCase()}</h3>
+    <div class="legend">${keys.map((k,i)=>`<span><i style="background:var(--c${i+1})"></i>${esc(k)}</span>`).join("")}<span class="muted"><i style="background:var(--line)"></i>sem lançamento</span></div>
+    <div class="chart">${chartSVG(per,keys)}</div></div>
+  <div class="panel tbl"><table><thead><tr><th>${POR[S.rep.por][1]}</th><th class="n">Homens-dia</th><th class="n">Média/dia</th><th class="n">Pico</th><th class="n">% do total</th></tr></thead><tbody>
+    ${allKeys.map(k=>`<tr><td>${esc(k)}</td><td class="n">${totals[k]}</td><td class="n">${(totals[k]/lanc.length).toFixed(1).replace(".",",")}</td><td class="n">${picoK(k)}</td><td class="n">${(totals[k]/hd*100).toFixed(1).replace(".",",")}%</td></tr>`).join("")}
+  </tbody><tfoot><tr><td>Total</td><td class="n">${hd}</td><td class="n">${media.toFixed(1).replace(".",",")}</td><td class="n">${pico?pico.tot:0}</td><td class="n">100%</td></tr></tfoot></table></div>`;
+  return h;
+}
+async function exportCSV(){
+  if(!isRH())return;
+  const {rows}=repData();const q=v=>`"${String(v).replace(/"/g,'""')}"`;
+  const csv="﻿"+["Data;Obra;Agrupamento;Grupo;Presentes",...rows.sort((a,b)=>cmp(a[0],b[0])||cmp(a[1],b[1])).map(r=>[r[0].split("-").reverse().join("/"),q(r[1]),r[2],q(r[3]),r[4]].join(";"))].join("\r\n");
+  const ds=repData().days;
+  try{await S.dl.save({filename:`efetivo_${S.rep.por}_${ds[0]}_a_${ds[ds.length-1]}.csv`,data:csv});toast("CSV exportado")}catch(e){if(e&&e.code!=="declined")toast("Não foi possível exportar o arquivo.",true)}
+}
+
+/* ---------- consolidado ---------- */
+function consData(){
+  const ativas=S.obras.filter(o=>o.ativa!==false),ids=new Set(ativas.map(o=>o.id)),fn=S.cons.fn,isObra=S.cons.col==="obra";
+  const days=periodDays(S.cons);
+  const byDay=new Map(days.map(d=>[d,{d,g:{},tot:0,has:false,lanc:0}]));
+  allPres(days).forEach(p=>{if(!ids.has(p.obraId))return;const r=byDay.get(p.data);if(!r)return;
+    const regs=(p.registros||[]).filter(x=>x.s==="P"&&(!fn||x.f===fn));
+    r.has=true;r.lanc++;r.tot+=regs.length;
+    if(isObra){const k=obraById(p.obraId).nome;r.g[k]=(r.g[k]||0)+regs.length}
+    else regs.forEach(x=>{const k=x.en||"Sem empresa";r.g[k]=(r.g[k]||0)+1})});
+  const per=[...byDay.values()];const tot={};per.forEach(r=>Object.entries(r.g).forEach(([k,v])=>tot[k]=(tot[k]||0)+v));
+  const cols=isObra?ativas.map(o=>o.nome):Object.keys(tot).filter(k=>tot[k]).sort((a,b)=>tot[b]-tot[a]);
+  return{per,cols,ativas,tot,days};
+}
+function funcOpts(){const set=new Set(funcoes());[...S.pres.values()].forEach(p=>(p.registros||[]).forEach(r=>r.f&&set.add(r.f)));return [...set]}
+function limitKeys(per,cols){
+  if(cols.length<=8)return{per,keys:cols};
+  const keep=cols.slice(0,7);
+  return{keys:[...keep,"Outros"],per:per.map(r=>{const g={};let o=0;Object.entries(r.g).forEach(([k,v])=>keep.includes(k)?g[k]=v:o+=v);if(o)g["Outros"]=o;return{...r,g}})};
+}
+function vCons(){
+  const {per,cols,ativas,tot,days}=consData();const fn=S.cons.fn;
+  const head=`<div class="head"><div><h2>Efetivo consolidado</h2><p class="lead">Soma do efetivo presente em todas as obras em andamento, dia a dia${fn?`, só da função <b>${esc(fn)}</b>`:""}. Um traço indica obra que não lançou presença no dia.</p></div></div>`;
+  if(!ativas.length)return head+emptyStart();
+  const lanc=per.filter(r=>r.has),hd=lanc.reduce((s,r)=>s+r.tot,0),media=lanc.length?hd/lanc.length:0;
+  const pico=lanc.reduce((m,r)=>r.tot>(m?.tot??-1)?r:m,null),hoje=per[per.length-1];
+  const N=ativas.length,isObra=S.cons.col==="obra";
+  const fmt1=v=>v.toFixed(1).replace(".",",");
+  let h=head+`<div class="panel pad toolbar">
+    ${periodFields("cons",S.cons)}
+    <label class="field grow"><span>Função</span><select id="c-fn" data-bind="cons.fn"><option value="">Todas as funções</option>${funcOpts().map(f=>`<option value="${esc(f)}"${f===fn?" selected":""}>${esc(f)}</option>`).join("")}</select></label>
+    <label class="field"><span>Colunas</span><select id="c-col" data-bind="cons.col"><option value="obra"${isObra?" selected":""}>Por obra</option><option value="empresa"${!isObra?" selected":""}>Por empresa</option></select></label>
+    <button class="btn" data-act="c-csv"${dis(!S.dl||!lanc.length)}>Exportar CSV</button></div>
+  <div class="tiles">
+    <div class="tile"><b>${hoje.tot}</b><span>${hoje.d===today()?"efetivo hoje":"efetivo em "+fmtShort(hoje.d)} · ${hoje.lanc}/${N} obras lançadas</span></div>
+    <div class="tile"><b>${Math.round(media)}</b><span>média diária no período</span></div>
+    <div class="tile"><b>${pico?pico.tot:0}</b><span>pico${pico?" em "+fmtShort(pico.d):""}</span></div>
+    <div class="tile"><b>${hd}</b><span>homens-dia no período</span></div>
+    <div class="tile${hoje.lanc<N?" alert":""}"><b>${N-hoje.lanc}</b><span>obras sem lançamento ${hoje.d===today()?"hoje":"em "+fmtShort(hoje.d)}</span></div></div>
+  <p class="small muted">${periodLabel(days)}${S.histBusy?" · buscando presenças mais antigas…":""}</p>`;
+  if(!lanc.length)return h+`<div class="panel empty"><h3>Sem presenças no período</h3><p class="muted">A tabela aparece assim que as obras começarem a lançar presença.</p></div>`;
+  const L=limitKeys(per,cols);
+  h+=`<div class="panel pad" style="display:flex;flex-direction:column;gap:12px"><h3>Efetivo total por dia${fn?" · "+esc(fn):""}</h3>
+    <div class="legend">${L.keys.map((k,i)=>`<span><i style="background:var(--c${i+1})"></i>${esc(k)}</span>`).join("")}<span class="muted"><i style="background:var(--line)"></i>sem lançamento</span></div>
+    <div class="chart">${chartSVG(L.per,L.keys)}</div></div>`;
+  const rows=[...per].reverse();
+  const colMax=k=>Math.max(0,...per.map(r=>r.g[k]||0));
+  h+=`<div class="panel tbl"><table class="matrix"><thead><tr><th>Dia</th>${cols.map(c=>`<th class="n">${esc(c)}</th>`).join("")}<th class="n tot">Total</th>${isObra?`<th class="n">Lançadas</th>`:""}</tr></thead><tbody>
+  ${rows.map(r=>`<tr class="${r.d===today()?"today":""}"><td>${fmtD(r.d)}</td>${cols.map(c=>{const v=r.g[c];return isObra&&v===undefined?`<td class="n miss" title="Sem lançamento">–</td>`:`<td class="n">${v||0}</td>`}).join("")}<td class="n tot">${r.has?r.tot:"–"}</td>${isObra?`<td class="n${r.lanc<N?" miss":""}">${r.lanc}/${N}</td>`:""}</tr>`).join("")}
+  </tbody><tfoot>
+  <tr><td>Média/dia</td>${cols.map(c=>{const ds=isObra?per.filter(r=>r.g[c]!==undefined):lanc;return `<td class="n">${ds.length?fmt1((tot[c]||0)/ds.length):"–"}</td>`}).join("")}<td class="n tot">${fmt1(media)}</td>${isObra?"<td></td>":""}</tr>
+  <tr><td>Pico</td>${cols.map(c=>`<td class="n">${colMax(c)}</td>`).join("")}<td class="n tot">${pico?pico.tot:0}</td>${isObra?"<td></td>":""}</tr>
+  <tr><td>Homens-dia</td>${cols.map(c=>`<td class="n">${tot[c]||0}</td>`).join("")}<td class="n tot">${hd}</td>${isObra?"<td></td>":""}</tr>
+  </tfoot></table></div>`;
+  return h;
+}
+async function exportCons(){
+  const {per,cols}=consData();const isObra=S.cons.col==="obra";const q=v=>`"${String(v).replace(/"/g,'""')}"`;
+  const lines=["Data;"+cols.map(q).join(";")+";Total",...per.map(r=>[r.d.split("-").reverse().join("/"),...cols.map(c=>isObra&&r.g[c]===undefined?"":(r.g[c]||0)),r.has?r.tot:""].join(";"))];
+  try{await S.dl.save({filename:`efetivo_consolidado${S.cons.fn?"_"+S.cons.fn.replace(/\W+/g,"-"):""}_${today()}.csv`,data:"﻿"+lines.join("\r\n")});toast("CSV exportado")}catch(e){if(e&&e.code!=="declined")toast("Não foi possível exportar o arquivo.",true)}
+}
+
+/* ---------- configurações ---------- */
+async function saveFuncoes(lista){await S.db.doc("config/funcoes").set({lista,atualizadoEm:new Date().toISOString()})}
+function vConfig(){
+  const lista=funcoes(),uso=f=>S.colabs.filter(c=>c.funcao===f).length;
+  let h=`<div class="head"><div><h2>Configurações</h2><p class="lead">Listas usadas nos cadastros. A ordem das funções aqui é a ordem em que aparecem no formulário do colaborador.</p></div></div>
+  <div class="panel pad" style="display:flex;flex-direction:column;gap:14px"><h3>Funções</h3>
+    <div class="toolbar"><label class="field grow"><span>Nova função</span><input id="cfg-nova" data-bind="cfg.nova" value="${esc(S.cfgNova)}" placeholder="Ex.: Gesseiro" autocomplete="off"></label><button class="btn pri" data-act="cfg-add"${W()}>Adicionar função</button></div>
+  </div>
+  <div class="panel list">${lista.map((f,i)=>{const n=uso(f);return `<div class="item"><div class="who"><strong>${esc(f)}</strong><em>${n} colaborador${n===1?"":"es"}</em></div>
+    ${S.cfgConfirm===f?`<div class="confirm" style="flex:1"><span>${n?`${n} colaboradores continuam com esta função, mas ela some da lista.`:"Remover da lista?"}</span><div class="row-btns"><button class="btn" data-act="cfg-keep">Manter</button><button class="btn danger" data-act="cfg-rm-ok" data-i="${i}">Remover</button></div></div>`
+    :`<div class="row-btns"><button class="btn sq" data-act="cfg-up" data-i="${i}" aria-label="Subir ${esc(f)}"${W()}${dis(i===0)}>↑</button><button class="btn sq" data-act="cfg-down" data-i="${i}" aria-label="Descer ${esc(f)}"${W()}${dis(i===lista.length-1)}>↓</button><button class="rm" data-act="cfg-rm" data-i="${i}" aria-label="Remover ${esc(f)}" title="Remover"${W()}>×</button></div>`}</div>`}).join("")}</div>`;
+  return h;
+}
+async function cfgChange(fn,msg){const l=[...funcoes()];if(fn(l)===false)return;try{await saveFuncoes(l);if(msg)toast(msg)}catch(e){toast(errMsg(e),true)}S.cfgConfirm="";render()}
+
+/* ---------- eventos ---------- */
+function route(){const v=(location.hash||"").slice(1);S.view=VIEWS.includes(v)?v:"presenca";S.confirm="";S.cadOpen=false;S.userOpen=false;render();window.scrollTo(0,0)}
+document.addEventListener("click",async ev=>{
+  if(S.cadOpen&&ev.target.closest("#cadmenu a")){S.cadOpen=false;document.getElementById("cadmenu").hidden=true;document.getElementById("cad-btn")?.setAttribute("aria-expanded","false");return}
+  if(S.cadOpen&&!ev.target.closest("#cadmenu,#cad-btn"))closeCad();
+  if(S.userOpen&&!ev.target.closest("#usermenu,#user-btn")){S.userOpen=false;if(!ev.target.closest("#usermenu a,[data-act]"))render()}
+  const t=ev.target.closest("[data-act]");if(!t)return;const a=t.dataset.act,id=t.dataset.id;
+  const key=pkey(S.sel.obra,S.sel.data);
+  switch(a){
+    case "p-prev":S.sel.data=addDays(S.sel.data,-1);break;
+    case "p-next":if(S.sel.data<today())S.sel.data=addDays(S.sel.data,1);break;
+    case "p-st":{const d=ensureDraft(key);d.st[id]=d.st[id]===t.dataset.s?"":t.dataset.s;if(!d.st[id])delete d.st[id];break}
+    case "p-all":{const d=ensureDraft(key);rowsFor(S.sel.obra,key).forEach(r=>{if(!r.s)d.st[r.id]="P"});break}
+    case "p-discard":delete S.drafts[key];break;
+    case "p-rm":{const d=ensureDraft(key);delete d.st[id];d.rm[id]=1;break}
+    case "p-delday":S.confirm="day";break;
+    case "p-delday-ok":try{await S.db.doc("presencas/"+key).delete();S.extra.delete(key);delete S.drafts[key];toast("Lançamento do dia excluído")}catch(e){toast(errMsg(e),true)}S.confirm="";break;
+    case "p-save":return savePres();
+    case "go-pres":S.sel.obra=id;S.sel.data=S.painelData;return;
+    case "fc-new":S.editColab={nome:"",funcao:"",empresaId:"",vinculo:"CLT",obraId:"",matricula:"",ativo:true};S.showImport=false;S.confirm="";break;
+    case "fc-edit":S.editColab={...S.colabs.find(c=>c.id===id)};S.showImport=false;S.confirm="";window.scrollTo(0,0);break;
+    case "fc-cancel":S.editColab=null;S.confirm="";break;
+    case "fc-save":return saveColab();
+    case "fc-del":S.confirm="colab";break;
+    case "fc-del-ok":try{await S.db.doc("colaboradores/"+S.editColab.id).delete();toast("Colaborador excluído");S.editColab=null;S.confirm=""}catch(e){toast(errMsg(e),true)}break;
+    case "selc":t.checked?S.selC.add(id):S.selC.delete(id);break;
+    case "bulk-clear":S.selC.clear();break;
+    case "bulk-go":{const ob=document.getElementById("bulk-obra").value;let n=0;try{for(const cid of S.selC){const c=S.colabs.find(x=>x.id===cid);await S.db.doc("colaboradores/"+cid).update({obraId:ob,historico:withHist(c||{},ob),atualizadoEm:new Date().toISOString()});n++}toast(`${n} colaboradores transferidos`);S.selC.clear()}catch(e){toast(errMsg(e),true)}break}
+    case "imp-open":S.showImport=true;S.editColab=null;break;
+    case "imp-close":S.showImport=false;break;
+    case "imp-go":return runImport();
+    case "fe-new":S.editEmp={nome:"",cnpj:"",tipo:"TERC",contato:""};S.confirm="";break;
+    case "fe-edit":S.editEmp={...S.empresas.find(e=>e.id===id)};S.confirm="";window.scrollTo(0,0);break;
+    case "fe-cancel":S.editEmp=null;S.confirm="";break;
+    case "fe-save":return saveEmp();
+    case "fe-del":S.confirm="emp";break;
+    case "fe-del-ok":try{const eid=S.editEmp.id;await S.db.doc("empresas/"+eid).delete();for(const c of S.colabs.filter(c=>c.empresaId===eid))await S.db.doc("colaboradores/"+c.id).update({empresaId:""});toast("Empresa excluída");S.editEmp=null;S.confirm=""}catch(e){toast(errMsg(e),true)}break;
+    case "fo-new":S.editObra={nome:"",codigo:"",endereco:"",ativa:true};S.confirm="";break;
+    case "fo-edit":S.teamF="";S.editObra={...S.obras.find(o=>o.id===id)};S.confirm="";window.scrollTo(0,0);break;
+    case "fo-cancel":S.editObra=null;S.confirm="";break;
+    case "fo-save":return saveObra();
+    case "fo-del":S.confirm="obra";break;
+    case "fo-del-ok":try{const oid=S.editObra.id;await S.db.doc("obras/"+oid).delete();for(const c of S.colabs.filter(c=>histOf(c).includes(oid)))await S.db.doc("colaboradores/"+c.id).update({obraId:c.obraId===oid?"":c.obraId,historico:histOf(c).filter(x=>x!==oid)});toast("Obra excluída");S.editObra=null;S.confirm=""}catch(e){toast(errMsg(e),true)}break;
+    case "cancel-del":S.confirm="";break;
+    case "r-csv":return exportCSV();
+    case "cad-toggle":S.cadOpen=!S.cadOpen;S.userOpen=false;break;
+    case "user-toggle":S.userOpen=!S.userOpen;S.cadOpen=false;break;
+    case "c-csv":return exportCons();
+    case "sim-start":{const v=document.getElementById("sim-obra")?.value;if(!v)return;S.sim={obras:[v]};S.userOpen=false;S.drafts={};S.sel={obra:v,data:today()};S.rep.obra="all";if(location.hash!=="#presenca"){location.hash="#presenca";return}break}
+    case "sim-stop":S.sim=null;S.userOpen=false;S.drafts={};break;
+    case "pw-change":S.userOpen=false;S.pwMode="change";S.loginErr="";break;
+    case "logout":S.userOpen=false;S.sim=null;await S.sb.auth.signOut().catch(()=>{});break;
+    case "us-new":S.editUser={nome:"",usuario:"",senha:"",papel:"ENC",obras:[]};S.confirm="";break;
+    case "us-edit":{const p=S.perfis.find(p=>p.id===id);if(!p)return;S.editUser={...p,obras:[...(p.obras||[])]};S.confirm="";window.scrollTo(0,0);break}
+    case "us-cancel":S.editUser=null;S.confirm="";break;
+    case "us-obra":{const u=S.editUser;u.obras=t.checked?[...new Set([...(u.obras||[]),id])]:(u.obras||[]).filter(x=>x!==id);break}
+    case "us-save":return saveUser();
+    case "us-reset":{const pw=document.getElementById("us-newpw").value;try{await apiUsuarios("senha",{id:S.editUser.id,senha:pw});toast("Senha redefinida. Passe a nova senha para a pessoa.");document.getElementById("us-newpw").value=""}catch(e){toast(msgOf(e),true)}return}
+    case "us-ativo":{const on=t.checked;try{await apiUsuarios("ativo",{id:S.editUser.id,ativo:on});S.editUser.ativo=on;toast(on?"Acesso liberado":"Acesso bloqueado")}catch(e){toast(msgOf(e),true)}break}
+    case "us-del":S.confirm="user";break;
+    case "us-del-ok":try{await apiUsuarios("excluir",{id:S.editUser.id});toast("Usuário excluído");S.editUser=null;S.confirm=""}catch(e){toast(msgOf(e),true)}break;
+    case "pw-back":S.pwMode="";S.loginErr="";break;
+    case "team-tog":return teamToggle(id,t.checked);
+    case "emp-tog":try{await S.db.doc("colaboradores/"+id).update({ativo:t.checked,atualizadoEm:new Date().toISOString()});toast(t.checked?"Colaborador ativado":"Colaborador inativado")}catch(e){toast(errMsg(e),true);render()}return;
+    case "cfg-add":{const f=S.cfgNova.trim();if(!f)return;if(funcoes().some(x=>x.toLowerCase()===f.toLowerCase())){toast("Essa função já está na lista.",true);return}S.cfgNova="";return cfgChange(l=>{l.push(f)},`Função ${f} adicionada`)}
+    case "cfg-rm":S.cfgConfirm=funcoes()[+t.dataset.i];break;
+    case "cfg-keep":S.cfgConfirm="";break;
+    case "cfg-rm-ok":return cfgChange(l=>{l.splice(+t.dataset.i,1)},"Função removida");
+    case "cfg-up":return cfgChange(l=>{const i=+t.dataset.i;if(i<1)return false;[l[i-1],l[i]]=[l[i],l[i-1]]});
+    case "cfg-down":return cfgChange(l=>{const i=+t.dataset.i;if(i>=l.length-1)return false;[l[i+1],l[i]]=[l[i],l[i+1]]});
+    default:return;
+  }
+  render();
+});
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&(S.cadOpen||S.userOpen)){const u=S.userOpen;closeCad();document.getElementById(u?"user-btn":"cad-btn")?.focus();return}if(ev.key==="Enter"&&ev.target.id==="cfg-nova"){ev.preventDefault();document.querySelector('[data-act="cfg-add"]').click();return}if((ev.key==="Enter"||ev.key===" ")&&ev.target.matches(".who[role=button]")){ev.preventDefault();ev.target.click()}});
+function onField(ev){
+  const t=ev.target;
+  if(t.dataset.act==="p-obra"){S.sel.obra=t.value;render();return}
+  if(t.dataset.act==="p-data"){if(t.value){S.sel.data=t.value>today()?today():t.value;render()}return}
+  if(t.dataset.act==="pn-data"){if(t.value){S.painelData=t.value;render()}return}
+  if(t.id==="sim-obra"){S.simPick=t.value;return}
+  if(t.dataset.act==="team-add"){if(t.value)teamToggle(t.value,true);return}
+  if(t.dataset.act==="p-add"){if(t.value){const d=ensureDraft(pkey(S.sel.obra,S.sel.data));d.st[t.value]="P";render()}return}
+  const b=t.dataset.bind;if(!b)return;const [grp,f]=b.split("."),val=t.type==="checkbox"?t.checked:t.value;
+  if(grp==="colab")S.editColab[f]=val;
+  else if(grp==="cfg")S.cfgNova=val;
+  else if(grp==="user"){S.editUser[f]=val;if(f==="papel")render()}
+  else if(grp==="emp")S.editEmp[f]=val;
+  else if(grp==="obra")S.editObra[f]=val;
+  else if(grp==="cf"){S.cf[f]=val;render()}
+  else if(grp==="imp"){if(f==="text")S.importText=val;else S.importObra=val;if(ev.type==="change"||f==="text")render()}
+  else if(grp==="cons"||grp==="rep"){const o=S[grp];
+    if(f==="dias"){if(val==="custom"){if(o.dias!=="custom"){const d=periodDays(o);o.ini=d[0];o.fim=d[d.length-1]}o.dias="custom"}else o.dias=Number(val)}
+    else if(f==="ini"||f==="fim"){if(!val||ev.type==="input")return;o[f]=val}
+    else o[f]=val;
+    render()}
+  else if(grp==="team"){S.teamF=val;render()}
+}
+document.addEventListener("input",ev=>{if(ev.target.tagName==="INPUT"||ev.target.tagName==="TEXTAREA")onField(ev)});
+document.addEventListener("change",ev=>{if(ev.target.tagName==="SELECT"||ev.target.type==="checkbox"||ev.target.type==="date")onField(ev)});
+
+/* ---------- conexão com o Supabase ---------- */
+function makeDb(sb){
+  const COLS={presencas:{data:"data",obraId:"obra_id"}};
+  const mapErr=e=>{const m=(e&&e.message)||"",c=e&&e.code;
+    if(c==="42501"||/row-level security|permission denied/i.test(m))return{code:"invalid_argument",message:m};
+    if(c==="PGRST301"||/jwt/i.test(m))return{code:"revoked",message:m};
+    return{code:"unavailable",message:m}};
+  const meta={fromCache:false,hasPendingWrites:false};
+  const snapDoc=(id,row)=>({id,exists:!!row,data:()=>row?row.doc:undefined,metadata:meta});
+  const qsnap=rows=>{const docs=rows.map(r=>snapDoc(String(r.id),r));return{docs,size:docs.length,empty:!docs.length,metadata:meta,docChanges:()=>[]}};
+  let n=0;
+  function live(table,filter,fetcher,next,error){
+    let dead=false,t=null;
+    const run=()=>{if(dead)return;fetcher().then(v=>{if(!dead)next(v)},e=>{if(!dead&&error)error(e&&e.code?e:mapErr(e))})};
+    const kick=()=>{clearTimeout(t);t=setTimeout(run,250)};
+    const ch=sb.channel("rt-"+table+"-"+(++n)).on("postgres_changes",{event:"*",schema:"public",table,...(filter?{filter}:{})},kick).subscribe();
+    const vis=()=>{if(document.visibilityState==="visible")kick()};
+    document.addEventListener("visibilitychange",vis);
+    const iv=setInterval(kick,60000);
+    run();
+    return()=>{dead=true;clearTimeout(t);clearInterval(iv);document.removeEventListener("visibilitychange",vis);sb.removeChannel(ch)};
+  }
+  function doc(path){
+    const [table,id]=path.split("/");
+    const get=async()=>{const {data,error}=await sb.from(table).select("id,doc").eq("id",id).maybeSingle();if(error)throw mapErr(error);return snapDoc(id,data)};
+    return{id,path,get,
+      async set(d){const {error}=await sb.from(table).upsert({id,doc:d});if(error)throw mapErr(error)},
+      async update(d){const cur=await get();if(!cur.exists)throw{code:"invalid_argument",message:"Registro não encontrado"};const {error}=await sb.from(table).update({doc:{...cur.data(),...d}}).eq("id",id);if(error)throw mapErr(error)},
+      async delete(){const {error}=await sb.from(table).delete().eq("id",id);if(error)throw mapErr(error)},
+      onSnapshot(next,error){return live(table,"id=eq."+id,get,next,error)}};
+  }
+  function query(table,filters){
+    const fetchAll=async()=>{const out=[];
+      for(let from=0;;from+=1000){
+        let q=sb.from(table).select("id,doc").order("id").range(from,from+999);
+        for(const [f,op,v] of filters){const c=(COLS[table]||{})[f];if(!c)throw{code:"invalid_argument",message:"Filtro não suportado: "+f};
+          q=op==="=="?q.eq(c,v):op===">="?q.gte(c,v):op===">"?q.gt(c,v):op==="<="?q.lte(c,v):op==="<"?q.lt(c,v):q}
+        const {data,error}=await q;if(error)throw mapErr(error);out.push(...data);if(data.length<1000)break}
+      return qsnap(out)};
+    return{path:table,where:(f,op,v)=>query(table,[...filters,[f,op,v]]),get:fetchAll,
+      onSnapshot:(next,error)=>live(table,null,fetchAll,next,error),
+      doc:id=>doc(table+"/"+id),
+      async add(d){const {data,error}=await sb.from(table).insert({doc:d}).select("id").single();if(error)throw mapErr(error);return doc(table+"/"+data.id)}};
+  }
+  return{doc,collection:t=>query(t,[])};
+}
+function saveFile({filename,data}){
+  const blob=new Blob([data],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);return Promise.resolve({status:"saved"});
+}
+
+/* ---------- inicialização ---------- */
+function stopData(){S.unsubs.forEach(u=>{try{u()}catch{}});S.unsubs=[]}
+function resetData(){
+  Object.assign(S,{obras:[],empresas:[],colabs:[],pres:new Map(),extra:new Map(),hist:new Map(),histFrom:null,perfis:[],funcoesCfg:null,
+    got:{obras:false,empresas:false,colabs:false,pres:false},perfisSeen:false,drafts:{},editColab:null,editObra:null,editEmp:null,editUser:null,sim:null,error:"",slow:false,me:null});
+}
+function startData(){
+  const db=makeDb(S.sb);S.db=db;
+  const timer=setTimeout(()=>{S.slow=true;render()},10000);
+  const fail=e=>{clearTimeout(timer);S.error=e&&e.code==="revoked"?"Sua sessão expirou. Saia e entre de novo.":"Não foi possível carregar os dados agora. Verifique a conexão; a página continua tentando.";render()};
+  const ok=()=>{if(S.error){S.error=""}};
+  const mark=(k,s)=>{ok();if(!s.metadata.fromCache)S.got[k]=true;if(allGot()){clearTimeout(timer);S.slow=false}};
+  S.unsubs.push(
+    db.collection("perfis").onSnapshot(s=>{ok();S.perfis=s.docs.map(d=>({id:d.id,...d.data()}));S.perfisSeen=true;const me=myPerfil();S.me=me?{name:me.nome||me.usuario,email:me.usuario}:{name:"",email:""};render()},fail),
+    db.collection("obras").onSnapshot(s=>{S.obras=s.docs.map(d=>({id:d.id,...d.data()})).sort(byNome);mark("obras",s);render()},fail),
+    db.collection("empresas").onSnapshot(s=>{S.empresas=s.docs.map(d=>({id:d.id,...d.data()})).sort(byNome);mark("empresas",s);render()},fail),
+    db.collection("colaboradores").onSnapshot(s=>{S.colabs=s.docs.map(d=>({id:d.id,...d.data()}));mark("colabs",s);render()},fail),
+    db.doc("config/funcoes").onSnapshot(s=>{ok();const l=s.exists&&s.data().lista;S.funcoesCfg=Array.isArray(l)&&l.length?l:null;render()},fail),
+    db.collection("presencas").where("data",">=",WINDOW_START).onSnapshot(s=>{S.pres=new Map(s.docs.map(d=>[d.id,d.data()]));mark("pres",s);render()},fail),
+    ()=>clearTimeout(timer));
+}
+function onSession(session){
+  const uid=session&&session.user?session.user.id:null;
+  S.session=session;
+  if(uid===S.uid&&S.userDone)return;
+  stopData();resetData();S.uid=uid;S.userDone=true;S.pwMode="";S.userOpen=false;S.cadOpen=false;
+  if(uid)startData();
+  render();
+}
+async function boot(){
+  document.getElementById("nav").addEventListener("scroll",closeCad,{passive:true});window.addEventListener("resize",closeCad);
+  document.getElementById("hoje").textContent=new Date().toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long"});
+  route();window.addEventListener("hashchange",route);
+  S.dl={save:saveFile};
+  try{const r=await fetch("/api/config",{cache:"no-store"});const j=await r.json().catch(()=>({}));if(!r.ok||!j.url||!j.anonKey)throw new Error(j.erro||"Não foi possível ler a configuração do servidor.");CFG=j}
+  catch(e){S.cfgErr=e.message||String(e);render();return}
+  if(!window.supabase||!window.supabase.createClient){S.cfgErr="Não foi possível carregar a biblioteca do Supabase. Verifique a conexão com a internet.";render();return}
+  S.sb=window.supabase.createClient(CFG.url,CFG.anonKey,{auth:{persistSession:true,autoRefreshToken:true,storageKey:"efetivo-ibuild-auth"}});
+  try{const {data}=await S.sb.rpc("precisa_configurar");S.setup=data===true}catch{}
+  const {data}=await S.sb.auth.getSession();
+  onSession(data.session);
+  S.sb.auth.onAuthStateChange((ev,session)=>onSession(session));
+}
+boot();
+</script>
+</body>
+</html>

@@ -430,7 +430,7 @@ function emptyStart(){
 }
 
 /* ---------- login (Supabase Auth) ---------- */
-const toEmail=u=>String(u||"").trim().toLowerCase()+"@"+CFG.loginDomain;
+const toEmail=u=>{u=String(u||"").trim().toLowerCase();return u.includes("@")?u:u+"@"+CFG.loginDomain};
 const normUser=u=>String(u||"").trim().toLowerCase();
 function myPerfil(){return S.perfis.find(p=>p.id===S.uid)}
 function authGate(){
@@ -502,7 +502,7 @@ document.addEventListener("submit",async ev=>{
     if(f.id==="login-form"){
       const u=normUser(V.u),pw=V.pw;
       const {error}=await S.sb.auth.signInWithPassword({email:toEmail(u),password:pw});
-      if(error)S.loginErr=/invalid|credentials/i.test(error.message)?"Usuário ou senha incorretos.":/banned/i.test(error.message)?"Seu acesso está desativado. Fale com o RH.":"Não foi possível entrar: "+error.message;
+      if(error)S.loginErr=/not confirmed/i.test(error.message)?"Usuário ainda não confirmado no Supabase (marque Auto Confirm User).":/invalid|credentials/i.test(error.message)?"Usuário ou senha incorretos.":/banned/i.test(error.message)?"Seu acesso está desativado. Fale com o RH.":"Não foi possível entrar: "+error.message;
     }else if(f.id==="setup-form"){
       const nome=V.nome.trim(),u=normUser(V.su),a=V.a,b=V.b;
       if(a!==b)S.loginErr="As duas senhas não são iguais.";
